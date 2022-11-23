@@ -1,4 +1,4 @@
-package com.training.e_cathering
+package com.training.e_cathering.Screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
