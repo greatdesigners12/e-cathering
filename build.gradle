@@ -4,11 +4,42 @@ buildscript {
         nav_version = "2.5.3"
 
     }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
+    }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'com.android.application' version '7.3.1' apply false
     id 'com.android.library' version '7.3.1' apply false
     id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
     id("com.google.dagger.hilt.android") version "2.44" apply false
+
+}
+
+allprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all{
+        kotlinOptions{
+            freeCompilerArgs += [
+                    "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes",
+                    "-Xuse-experimental=kotlinx.coroutines.DelicateCoroutinesApi",
+                    "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutineApi",
+                    "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
+                    "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi",
+                    "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi",
+                    "-Xuse-experimental=kotlinx.compose.animation.ExperimentalAnimationApi",
+                    "-Xuse-experimental=kotlinx.ExperimentalComposeApi",
+                    "-Xuse-experimental=kotlinx.material.ExperimentalMaterialApi",
+                    "-Xuse-experimental=kotlinx.runtime.ExperimentalComposeApi",
+                    "-Xuse-experimental=kotlinx.ui.ExperimentalComposeUiApi",
+                    "-Xuse-experimental=coil.annotation.ExperimentalCoilApi",
+                    "-Xuse-experimental=com.google.accompanist.pager.ExperimentalPagerApi",
+            ]
+        }
+    }
 
 }
