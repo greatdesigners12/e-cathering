@@ -18,7 +18,7 @@ import com.pusher.client.connection.ConnectionStateChange
 @Composable
 fun LoginScreenActivity(navController: NavController, loginViewModel : LoginScreenViewModel = viewModel()) {
     LaunchedEffect(key1 = true ){
-        loginViewModel.setupPusher()
+
     }
     Column(){
         Text("This is login screen")
