@@ -65,13 +65,18 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation 'com.pusher:pusher-java-client:2.4.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation("io.coil-kt:coil-compose:2.2.2")
+
     implementation "com.google.accompanist:accompanist-permissions:0.24.1-alpha"
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 
 }
 

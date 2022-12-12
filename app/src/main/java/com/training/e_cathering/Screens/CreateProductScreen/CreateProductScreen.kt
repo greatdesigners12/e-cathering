@@ -4,9 +4,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
@@ -44,7 +42,7 @@ fun CreateProductScreen() {
         mutableStateOf("")
     }
     val pickedImage = remember{mutableStateOf<Uri?>(null)}
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         val mContext = LocalContext.current
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().padding(top=16.dp,bottom=8.dp))
         {

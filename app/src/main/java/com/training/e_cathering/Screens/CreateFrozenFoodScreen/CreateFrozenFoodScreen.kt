@@ -3,6 +3,8 @@ package com.training.e_cathering.Screens.CreateFrozenFoodScreen
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -35,7 +37,7 @@ fun CreateFrozenFoodScreen() {
         mutableStateOf("")
     }
     val pickedImage = remember{ mutableStateOf<Uri?>(null) }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         val mContext = LocalContext.current
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().padding(top=16.dp,bottom=8.dp))
         {

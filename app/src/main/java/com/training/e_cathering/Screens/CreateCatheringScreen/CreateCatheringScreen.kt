@@ -2,6 +2,8 @@ package com.training.e_cathering.Screens.CreateCatheringScreen
 
 import android.net.Uri
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -40,7 +42,7 @@ fun CreateCatheringScreen(){
     }
 
     val pickedImage = remember{ mutableStateOf<Uri?>(null) }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState()).fillMaxSize()) {
         val mContext = LocalContext.current
         Box(contentAlignment = Alignment.Center, modifier = Modifier
             .fillMaxWidth()
