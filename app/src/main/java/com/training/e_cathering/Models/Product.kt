@@ -1,0 +1,17 @@
+package com.training.e_cathering.Models
+
+
+import com.google.gson.annotations.SerializedName
+
+data class Product(
+    @SerializedName("cathering_id")
+    val catheringId: String,
+    @SerializedName("deskripsi")
+    val deskripsi: String,
+    @SerializedName("harga")
+    val harga: Int,
+    @SerializedName("image")
+    val image: String,
+    @SerializedName("nama")
+    val nama: String
+)
