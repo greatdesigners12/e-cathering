@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.training.e_cathering.Models.Product
-import com.training.e_cathering.Repositories.AuthRepository
 import com.training.e_cathering.Repositories.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,29 +18,38 @@ import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateProductViewModel @Inject constructor(private val repository: ProductRepository) : ViewModel() {
+class productViewModel @Inject constructor(private val repository: ProductRepository) : ViewModel() {
 
     fun createProduct(product: Product, token : Flow<String?>, imageUri : Uri){
 
             val storage = Firebase.storage
             val storageRef = storage.reference.child("products/" + md5Hash(product.nama + product.catheringId) + ".jpg")
             val uploadImageResult = storageRef.putFile(imageUri)
-            uploadImageResult.addOnSuccessListener {task ->
-                viewModelScope.launch(Dispatchers.IO) {
-                    token.collect{
-                        if(it != null){
-                            product.image = storageRef.downloadUrl.result.toString()
-                            Log.d(TAG, "createProduct: ${product.image}")
-                            repository.createProduct(product, it)
-                        }
-
+            uploadImageResult.continueWithTask{task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
                     }
                 }
+                storageRef.downloadUrl
+            }.addOnCompleteListener{task ->
+                if(task.isSuccessful){
+                    viewModelScope.launch(Dispatchers.IO) {
+                        token.collect{
+                            if(it != null){
+                                product.image = task.result.toString()
+                                Log.d(TAG, "createProduct: ${product.image}")
+                                repository.createProduct(product, it)
+                            }
 
-            }.addOnFailureListener{
-                Log.d(TAG, "createProduct: ${it.message}")
+                        }
+                    }
+                }else{
+                    Log.d(TAG, "createProduct: error")
+                }
+
+
             }
-
 
 
     }

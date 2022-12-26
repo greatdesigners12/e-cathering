@@ -8,6 +8,7 @@ enum class NavigationEnum {
     CreateFrozenFoodActivity,
     CreateCatheringActivity,
     RegisterScreenActivity,
-
+    HistoryScreenActivity,
+    SettingScreenActivity
 
 }

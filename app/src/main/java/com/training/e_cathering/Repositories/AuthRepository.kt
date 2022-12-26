@@ -4,12 +4,10 @@ import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.training.e_cathering.Models.Auth
-import com.training.e_cathering.Models.Cathering
 import com.training.e_cathering.Models.LoginJwtToken
 import com.training.e_cathering.Models.User
 import com.training.e_cathering.Utils.DataAPIWrapper
 import com.training.e_cathering.network.AuthAPI
-import com.training.e_cathering.network.CatheringAPI
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(private val authApi: AuthAPI) {

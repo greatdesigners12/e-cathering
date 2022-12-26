@@ -1,12 +1,8 @@
 package com.training.e_cathering.Screens.CreateProductScreen
 
 import android.net.Uri
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -15,23 +11,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
 import com.training.e_cathering.Components.ImagePickerView
 import com.training.e_cathering.Components.basicInputField
 import com.training.e_cathering.Components.textInputField
-import com.training.e_cathering.Screens.HomeScreen.HomeScreenActivity
+import com.training.e_cathering.DataStoreInstance
+import com.training.e_cathering.Models.Product
 
 
 @Composable
-fun CreateProductScreen() {
+fun CreateProductScreen(viewModel: productViewModel) {
     val inputNamaProduk = remember{
         mutableStateOf("")
     }
@@ -42,6 +34,8 @@ fun CreateProductScreen() {
         mutableStateOf("")
     }
     val pickedImage = remember{mutableStateOf<Uri?>(null)}
+
+    val dataStore = DataStoreInstance(LocalContext.current)
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         val mContext = LocalContext.current
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().padding(top=16.dp,bottom=8.dp))
@@ -70,7 +64,7 @@ fun CreateProductScreen() {
             Text(text = "Harga Produk", style = MaterialTheme.typography.h5)
         }
         Box( modifier = Modifier.fillMaxWidth().padding(top=0.dp,bottom=8.dp, start = 16.dp, end = 16.dp)){
-            basicInputField(label = "Harga Produk", inputValue = inputHargaProduk.value){
+            basicInputField(label = "Harga Produk", inputValue = inputHargaProduk.value, keyboardType = KeyboardType.Number){
             inputHargaProduk.value=it
             }
         }
@@ -84,17 +78,15 @@ fun CreateProductScreen() {
         }
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)){
         Button(onClick = {
-            Toast.makeText(mContext, "Product Berhasil Dibuat", Toast.LENGTH_SHORT).show()
+
+            pickedImage.value?.let {
+                viewModel.createProduct(Product("2", inputDeskripsiProduk.value, inputHargaProduk.value.toInt(), "", inputNamaProduk.value), dataStore.getToken,
+                    it
+                )
+            }
         }) {
             Text(text = "Kirim")
         }}
     }
 }
 
-
-@Preview
-@Composable
-fun preview(){
-    CreateProductScreen()
-
-}
