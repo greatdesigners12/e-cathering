@@ -3,9 +3,9 @@ package com.training.e_cathering.Models
 
 import com.google.gson.annotations.SerializedName
 
-data class SingleResponseData(
+data class SingleResponseData<T>(
     @SerializedName("data")
-    val data: Any,
+    val data: T,
     @SerializedName("status")
     val status: String,
     @SerializedName("statusCode")

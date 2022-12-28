@@ -11,10 +11,24 @@ import com.training.e_cathering.network.ProductAPI
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(private val productAPI: ProductAPI) {
-    suspend fun createProduct(product : Product, token : String) : DataAPIWrapper<SingleResponseData, Boolean, Exception>{
-        val data = DataAPIWrapper<SingleResponseData, Boolean, Exception>()
+    suspend fun createProduct(product : Product, token : String) : DataAPIWrapper<SingleResponseData<Product>, Boolean, Exception>{
+        val data = DataAPIWrapper<SingleResponseData<Product>, Boolean, Exception>()
         try {
             data.data = productAPI.createProduct(product, token)
+            data.loading = false
+            Log.d(TAG, "createProduct: success")
+        }catch (e : Exception){
+            data.loading = false
+            data.e = e
+            Log.d(TAG, "createProduct: ${e.message}")
+        }
+        return data
+    }
+
+    suspend fun getProductDetail(product_id : String, token : String) : DataAPIWrapper<SingleResponseData<Product>, Boolean, Exception>{
+        val data = DataAPIWrapper<SingleResponseData<Product>, Boolean, Exception>()
+        try {
+            data.data = productAPI.getProductById(product_id, token)
             data.loading = false
             Log.d(TAG, "createProduct: success")
         }catch (e : Exception){

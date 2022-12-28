@@ -3,7 +3,7 @@ package com.training.e_cathering.Models
 
 import com.google.gson.annotations.SerializedName
 
-data class Data(
+data class Cathering(
     @SerializedName("deskripsi")
     val deskripsi: String,
     @SerializedName("id")

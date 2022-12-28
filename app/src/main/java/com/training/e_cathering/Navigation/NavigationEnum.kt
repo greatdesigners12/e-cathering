@@ -4,11 +4,14 @@ enum class NavigationEnum {
     SplashScreenActivity,
     LoginScreenActivity,
     HomeScreenActivity,
+    ProductDetailActivity,
+    CatheringDetailActivity,
     CreateProductActivity,
     CreateFrozenFoodActivity,
     CreateCatheringActivity,
     RegisterScreenActivity,
     HistoryScreenActivity,
-    SettingScreenActivity
+    SettingScreenActivity,
+
 
 }
