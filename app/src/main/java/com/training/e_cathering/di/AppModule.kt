@@ -2,8 +2,7 @@ package com.training.e_cathering.di
 
 
 import com.training.e_cathering.Constant.BASE_URL
-import com.training.e_cathering.network.AuthAPI
-import com.training.e_cathering.network.CatheringAPI
+import com.training.e_cathering.network.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,10 +21,30 @@ class AppModule {
         return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CatheringAPI::class.java)
     }
 
+
+
     @Singleton
     @Provides
     fun provideUserAPI() : AuthAPI {
         return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(AuthAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideProductAPI() : ProductAPI {
+        return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(ProductAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCategoryAPI() : CategoryApi {
+        return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CategoryApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCartAPI() : CartAPI {
+        return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CartAPI::class.java)
     }
 
 }

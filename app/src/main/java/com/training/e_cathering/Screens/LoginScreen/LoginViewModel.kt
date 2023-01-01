@@ -3,14 +3,17 @@ package com.training.e_cathering.Screens.LoginScreen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
+import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.Auth
 import com.training.e_cathering.Models.LoginJwtToken
 import com.training.e_cathering.Models.User
+import com.training.e_cathering.Navigation.NavigationEnum
 import com.training.e_cathering.Repositories.AuthRepository
 import com.training.e_cathering.Utils.DataAPIWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +30,14 @@ class LoginViewModel @Inject constructor(private val repository: AuthRepository)
     fun login(user : User){
         viewModelScope.launch(Dispatchers.IO) {
             _loginStatus.emit(repository.login(user))
+        }
+    }
+
+    fun setCredential(credential : LoginJwtToken, dataStoreInstance: DataStoreInstance, navController: NavController){
+        viewModelScope.launch(Dispatchers.Main) {
+            credential.userId?.let { dataStoreInstance.setUserId(it) }
+            dataStoreInstance.setTokenId(credential.token)
+            navController.navigate(NavigationEnum.HomeScreenActivity.name)
         }
     }
     fun setupPusher(){

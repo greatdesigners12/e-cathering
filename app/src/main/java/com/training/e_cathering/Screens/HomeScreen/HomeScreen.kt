@@ -1,56 +1,86 @@
 package com.training.e_cathering.Screens.HomeScreen
 
-import androidx.compose.foundation.Image
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.midtrans.sdk.corekit.core.MidtransSDK
+import com.midtrans.sdk.corekit.core.TransactionRequest
+import com.midtrans.sdk.corekit.core.themes.CustomColorTheme
+import com.midtrans.sdk.corekit.models.*
+import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.training.e_cathering.Components.basicInputField
+import com.training.e_cathering.Constant.client_key
+import com.training.e_cathering.Constant.midtrans_base_url
+import com.training.e_cathering.DataStoreInstance
+import com.training.e_cathering.Models.Category
 import com.training.e_cathering.Models.Cathering
-import com.training.e_cathering.Models.Data
-import com.training.e_cathering.R
+import com.training.e_cathering.Navigation.NavigationEnum
+
 
 @Composable
-fun HomeScreenActivity(homeViewModel : HomeViewModel) {
+fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavController) {
     val searchInput = remember{
         mutableStateOf("")
     }
 
     val allCatheringList = remember{
-        mutableStateListOf<Data>()
+        mutableStateListOf<Cathering>()
     }
+
+    val allCategoryList = remember{
+        mutableStateListOf<Category>()
+    }
+
+
+    val dataStore = DataStoreInstance(LocalContext.current)
+
     LaunchedEffect(key1 = true){
         homeViewModel.getAllCatherings()
+        homeViewModel.getAllCategories(dataStore.getToken)
+
     }
     LaunchedEffect(key1 = homeViewModel.catheringList.collectAsState(initial = null).value){
 
             homeViewModel.catheringList.collect{
-                if(it.data?.data != null){
-                    allCatheringList.addAll(it.data?.data!!)
+                if(!it.isEmpty()){
+
+                    allCatheringList.addAll(it)
                 }
 
             }
+
+
+    }
+
+    LaunchedEffect(key1 = homeViewModel.categoryList.collectAsState(initial = null).value){
+
+        homeViewModel.categoryList.collect{
+            if(!it.isEmpty()){
+                allCategoryList.addAll(it)
+            }
+
+        }
 
 
     }
@@ -67,6 +97,7 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel) {
                 Text("Welcome, user !", color=Color.White)
                 basicInputField(label = "Search", inputValue = searchInput.value){
                     searchInput.value = it
+                    homeViewModel.searchAll(it, dataStore.getToken)
                 }
 
             }
@@ -76,9 +107,81 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel) {
             Text("Favourite Cathering", fontWeight = FontWeight.Bold, fontSize = 25.sp)
             LazyRow{
                 items(items=allCatheringList){item ->
-                    CatheringCard(item)
+                    CatheringCard(item){
+                        navController.navigate(NavigationEnum.CatheringDetailActivity.name + "/" + item.id)
+                    }
                     Spacer(modifier = Modifier.width(10.dp))
                 }
+            }
+            Text("Category", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+            LazyRow{
+                items(items=allCategoryList){item ->
+                    CategoryCard(item){
+                        navController.navigate(NavigationEnum.CatheringListActivity.name + "/" + it)
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
+            }
+            val context = LocalContext.current
+            Button(onClick = {
+                val sdk = SdkUIFlowBuilder.init()
+                    .setClientKey(client_key) // client_key is mandatory
+                    .setContext(context) // context is mandatory
+                    .setTransactionFinishedCallback {
+                        // Handle finished transaction here.
+                    } // set transaction finish callback (sdk callback)
+                    .setMerchantBaseUrl(midtrans_base_url) //set merchant url (required)
+                    .enableLog(true) // enable sdk log (optional)
+                    .setColorTheme(
+                        CustomColorTheme(
+                            "#FFE51255",
+                            "#B61548",
+                            "#FFE51255"
+                        )
+                    ) // set theme. it will replace theme on snap theme on MAP ( optional)
+                    .buildSDK()
+                val transactionRequest = TransactionRequest("awdawdaw", 20000.0)
+                val customerDetails = CustomerDetails()
+                customerDetails.setCustomerIdentifier("budi-6789")
+                customerDetails.setPhone("08123456789")
+                customerDetails.setFirstName("Budi")
+                customerDetails.setLastName("Utomo")
+                customerDetails.setEmail("budi@utomo.com")
+
+                val shippingAddress = ShippingAddress()
+                shippingAddress.address = "Jalan Andalas Gang Sebelah No. 1"
+                shippingAddress.city = "Jakarta"
+                shippingAddress.postalCode = "10220"
+                customerDetails.setShippingAddress(shippingAddress)
+
+                val billingAddress = BillingAddress()
+                billingAddress.address = "Jalan Andalas Gang Sebelah No. 1"
+                billingAddress.city = "Jakarta"
+                billingAddress.postalCode = "10220"
+                customerDetails.setBillingAddress(billingAddress)
+                val itemDetails1 =
+                    ItemDetails("ITEM_ID_1", 10000.0, 1, "ITEM_NAME_1")
+                val itemDetails2 =
+                    ItemDetails("ITEM_ID_2", 10000.0, 1, "ITEM_NAME_2")
+
+// Create array list and add above item details in it and then set it to transaction request.
+
+// Create array list and add above item details in it and then set it to transaction request.
+                val itemDetailsList: ArrayList<ItemDetails> = ArrayList()
+                itemDetailsList.add(itemDetails1)
+                itemDetailsList.add(itemDetails2)
+
+                transactionRequest.itemDetails = itemDetailsList
+                transactionRequest.setCustomerDetails(customerDetails)
+                val billInfoModel = BillInfoModel("BILL_INFO_KEY", "BILL_INFO_VALUE")
+
+                transactionRequest.billInfoModel = billInfoModel
+                sdk.setTransactionRequest(transactionRequest)
+                sdk.startPaymentUiFlow(context)
+            }) {
+
+                Text("Start payment")
+
             }
         }
 
@@ -88,8 +191,13 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel) {
 }
 
 @Composable
-fun CatheringCard(data : Data){
-    Card(modifier = Modifier.width(100.dp).height(150.dp)){
+fun CatheringCard(data : Cathering, cardClick : () -> Unit){
+    Card(modifier = Modifier
+        .width(100.dp)
+        .height(150.dp)
+        .clickable {
+            cardClick()
+        }){
         Column(){
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -101,6 +209,32 @@ fun CatheringCard(data : Data){
                 contentScale = ContentScale.Crop,
             )
             Text(data.nama, textAlign = TextAlign.Center)
+        }
+
+    }
+}
+
+@Composable
+fun CategoryCard(data : Category, onClick : (String) -> Unit){
+    Card(modifier = Modifier
+        .width(100.dp)
+        .height(100.dp).clickable {
+            onClick(data.namaKategori)
+        }){
+        Column(horizontalAlignment = Alignment.CenterHorizontally){
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(data.image)
+                    .crossfade(true)
+                    .build(),
+                modifier = Modifier.height(75.dp),
+                contentDescription = "Category image",
+                contentScale = ContentScale.Fit,
+            )
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                Text(data.namaKategori, textAlign = TextAlign.Center)
+            }
+
         }
 
     }

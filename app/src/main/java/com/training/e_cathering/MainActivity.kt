@@ -1,22 +1,25 @@
 package com.training.e_cathering
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
+import com.training.e_cathering.Components.UserPageBottomNavigation
 import com.training.e_cathering.Navigation.AppNavigation
+import com.training.e_cathering.Navigation.NavigationEnum
 import com.training.e_cathering.ui.theme.EcatheringTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,11 +35,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+
                     AppNavigation()
                 }
             }
         }
     }
 }
+
+
 
 

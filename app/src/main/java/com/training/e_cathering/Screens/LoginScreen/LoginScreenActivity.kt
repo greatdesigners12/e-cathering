@@ -1,5 +1,7 @@
 package com.training.e_cathering.Screens.LoginScreen
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
@@ -20,6 +22,8 @@ import com.training.e_cathering.Components.basicInputField
 import com.training.e_cathering.Components.passwordInputField
 import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.User
+import com.training.e_cathering.Navigation.NavigationEnum
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel) {
@@ -49,6 +53,18 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
 
     val dataStore = DataStoreInstance(LocalContext.current)
 
+    LaunchedEffect(key1 = true){
+        dataStore.getToken.collect{
+            Log.d(TAG, "LoginScreenActivity: ${it}")
+            if(it != "" && it != null){
+                navController.navigate(NavigationEnum.HomeScreenActivity.name)
+            }
+        }
+
+
+
+    }
+
     LaunchedEffect(key1 = viewModel.loginStatus.collectAsState(initial = "").value){
 
         viewModel.loginStatus.collect{
@@ -56,8 +72,7 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
                 if(it.data!!.message == "login berhasil"){
                     alertDialogMsg.value = "Login berhasil"
                     showAlertDialog.value = true
-                    dataStore.setUserId(it.data!!.userId)
-                    dataStore.setTokenId(it.data!!.token)
+                   viewModel.setCredential(it.data!!, dataStore, navController)
 
 
                 }else{
@@ -77,15 +92,23 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
 
     if(showAlertDialog.value){
         SimpleAlertDialog(title = if(alertDialogMsg.value == "Login berhasil")  "success" else "Error", message = alertDialogMsg.value, onDismissRequest = {
+
             closeAlertDialog()
             loadingProgress.value = false
+
+
         }) {
+
             closeAlertDialog()
+
             loadingProgress.value = false
+
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp), verticalArrangement = Arrangement.Center) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 10.dp), verticalArrangement = Arrangement.Center) {
 
         Text("LOGIN", modifier= Modifier.fillMaxWidth(), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 25.sp)
         basicInputField(label = "Email", inputValue = emailInput.value){

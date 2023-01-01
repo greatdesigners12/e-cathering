@@ -1,6 +1,8 @@
 package com.training.e_cathering
 
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -28,15 +30,22 @@ class DataStoreInstance(private val context: Context) {
         }
 
     //save email into datastore
-    suspend fun setUserId(name: String) {
+    suspend fun setUserId(id: Int) {
         context.dataStore.edit { preferences ->
-            preferences[USER_ID_KEY] = name
+            preferences[USER_ID_KEY] = id.toString()
+
         }
     }
 
     suspend fun setTokenId(token: String) {
         context.dataStore.edit { preferences ->
             preferences[TOKEN_ID_KEY] = token
+        }
+    }
+
+    suspend fun deleteToken() {
+        context.dataStore.edit { preferences ->
+            preferences[TOKEN_ID_KEY] = ""
         }
     }
 

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.training.e_cathering.Components.ImagePickerView
 import com.training.e_cathering.Components.basicInputField
+import com.training.e_cathering.Components.basicRadioGroup
 
 
 @Composable
@@ -31,18 +32,11 @@ fun CreateCatheringScreen(){
     val inputDeskripsiProduk = remember{
         mutableStateOf("")
     }
-    val harianIsChecked = remember {
-        mutableStateOf(false)
-    }
-    val mingguanIsChecked = remember {
-        mutableStateOf(false)
-    }
-    val BulananIsChecked = remember {
-        mutableStateOf(false)
-    }
 
     val pickedImage = remember{ mutableStateOf<Uri?>(null) }
-    Column(modifier = Modifier.verticalScroll(rememberScrollState()).fillMaxSize()) {
+    Column(modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .fillMaxSize()) {
         val mContext = LocalContext.current
         Box(contentAlignment = Alignment.Center, modifier = Modifier
             .fillMaxWidth()
@@ -58,11 +52,17 @@ fun CreateCatheringScreen(){
                 pickedImage.value = it
             }
         )
+
+
+
         Box( modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)){
             Text(text = "Nama Produk", style= MaterialTheme.typography.h5)
         }
+
+
+
         Box( modifier = Modifier
             .fillMaxWidth()
             .padding(top = 0.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)){
