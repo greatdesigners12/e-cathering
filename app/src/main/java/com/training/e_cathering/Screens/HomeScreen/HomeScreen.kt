@@ -63,9 +63,11 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
     LaunchedEffect(key1 = homeViewModel.catheringList.collectAsState(initial = null).value){
 
             homeViewModel.catheringList.collect{
-                if(!it.isEmpty()){
-
+                if(it != null){
+                    allCatheringList.clear()
                     allCatheringList.addAll(it)
+                }else{
+                    allCatheringList.clear()
                 }
 
             }
@@ -76,8 +78,11 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
     LaunchedEffect(key1 = homeViewModel.categoryList.collectAsState(initial = null).value){
 
         homeViewModel.categoryList.collect{
-            if(!it.isEmpty()){
+            if(it != null){
+                allCategoryList.clear()
                 allCategoryList.addAll(it)
+            }else{
+                allCategoryList.clear()
             }
 
         }

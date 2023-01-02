@@ -1,6 +1,7 @@
 package com.training.e_cathering.Screens.HomeScreen
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,6 +31,7 @@ class HomeViewModel @Inject constructor(private val catheringRepository: Catheri
             token.collect{
                 if(it != null){
                     val data = catheringRepository.searchAll(search, it)
+                    Log.d(TAG, "searchAll: ${search}")
                     data.data?.let { it1 -> _catheringList.emit(it1.catherings) }
                     data.data?.categories?.let { it1 -> _categoryList.emit(it1) }
                 }

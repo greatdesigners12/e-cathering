@@ -22,6 +22,7 @@ import com.training.e_cathering.Models.CatheringWithRating
 import com.training.e_cathering.Models.Product
 import com.training.e_cathering.R
 import kotlinx.coroutines.flow.collect
+import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 
@@ -78,7 +79,8 @@ fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (Product) 
                 Row(){
                     Image(painter = painterResource(id = R.drawable.ic_baseline_star), contentDescription = "")
                     Spacer(modifier = Modifier.width(5.dp))
-                    Text(cathering.average_rating.roundToInt().toString())
+
+                    Text(DecimalFormat("#.##").format(cathering.average_rating).toString())
                 }
                 Spacer(Modifier.height(5.dp))
                 Text(cathering.deskripsi, fontSize = 10.sp)

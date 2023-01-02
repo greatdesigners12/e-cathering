@@ -141,6 +141,13 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     ?.let { it1 -> ProductDetailScreen(navController, it1, productDetailViewModel) }
             }
 
+            composable(NavigationEnum.CartDetailActivity.name + "/{catheringId}", arguments = listOf(
+                navArgument("catheringId"){type = NavType.StringType}
+            )){
+                it.arguments?.getString("catheringId")
+                    ?.let { it1 -> ProductDetailScreen(navController, it1, productDetailViewModel) }
+            }
+
             composable(NavigationEnum.CatheringDetailActivity.name + "/{catheringId}", arguments = listOf(
                 navArgument("catheringId"){type = NavType.StringType}
             )){
