@@ -1,4 +1,4 @@
-package com.training.e_cathering.Screens.CatheringListScreen
+package com.training.e_cathering.Screens.CatheringApprovalScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,6 @@ import com.training.e_cathering.Models.Cathering
 import com.training.e_cathering.Models.CatheringWithRating
 import com.training.e_cathering.Models.Response
 import com.training.e_cathering.Repositories.CatheringRepository
-import com.training.e_cathering.Repositories.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CatheringListViewModel @Inject constructor(val catheringRepository: CatheringRepository) : ViewModel() {
+class CatheringApprovalViewModel @Inject constructor(val catheringRepository: CatheringRepository) : ViewModel() {
     private val _catheringList = MutableSharedFlow<Response<CatheringWithRating>>()
     val catheringList = _catheringList.asSharedFlow()
     private val _catheringData = MutableSharedFlow<Cathering>()
@@ -37,7 +36,23 @@ class CatheringListViewModel @Inject constructor(val catheringRepository: Cather
         }
     }
 
+    fun updateVerifiedCathering(cathering: Cathering, cathering_id : String, token : Flow<String?>){
+        viewModelScope.launch(Dispatchers.IO){
+            token.collect{
+                if(it != null){
+                    catheringRepository.updateVerifiedCathering(cathering,cathering_id, it).data?.let { it1 ->
+                        _catheringData.emit(
+                            it1.data
+                        )
+                    }
 
+
+
+                }
+            }
+
+        }
+    }
 
 
 }

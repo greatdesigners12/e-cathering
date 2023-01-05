@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -29,6 +30,7 @@ import coil.request.ImageRequest
 import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.*
 import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailViewModel
+import com.training.e_cathering.ui.theme.EcatheringTheme
 
 @Composable
 fun CatheringDetailScreen(navController: NavController, id : String, viewModel: CatheringDetailViewModel) {
@@ -216,3 +218,4 @@ fun productCardHorizontal(product: Product, buttonText : String, onClick : (Prod
         }
     }
 }
+

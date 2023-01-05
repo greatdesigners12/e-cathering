@@ -1,4 +1,4 @@
-package com.training.e_cathering.Screens.CatheringListScreen
+package com.training.e_cathering.Screens.CatheringApprovalScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -17,17 +17,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.e_cathering.DataStoreInstance
-import com.training.e_cathering.Models.Cathering
 import com.training.e_cathering.Models.CatheringWithRating
 import com.training.e_cathering.Models.Product
 import com.training.e_cathering.R
-import kotlinx.coroutines.flow.collect
 import java.text.DecimalFormat
-import kotlin.math.roundToInt
-
 
 @Composable
-fun CatheringListScreen(genre : String,viewModel: CatheringListViewModel) {
+fun CatheringApprovalScreen(genre : String,viewModel: CatheringApprovalViewModel) {
     val catheringList = remember{
         mutableStateListOf<CatheringWithRating>()
     }
@@ -45,10 +41,10 @@ fun CatheringListScreen(genre : String,viewModel: CatheringListViewModel) {
     }
 
     LazyColumn(modifier = Modifier.padding(10.dp)){
-        
+
         items(items=catheringList){cathering ->
             CatheringCardHorizontal(cathering = cathering){
-                
+
             }
             Spacer(modifier = Modifier.height(20.dp))
         }

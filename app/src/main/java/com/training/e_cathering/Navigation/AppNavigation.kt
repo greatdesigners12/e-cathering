@@ -26,6 +26,8 @@ import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailScr
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailViewModel
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListScreen
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListViewModel
+import com.training.e_cathering.Screens.CatheringProfileScreen.CatheringProfileScreen
+import com.training.e_cathering.Screens.CatheringProfileScreen.CatheringProfileViewModel
 import com.training.e_cathering.Screens.CreateCatheringScreen.CreateCatheringScreen
 import com.training.e_cathering.Screens.CreateFrozenFoodScreen.CreateFrozenFoodScreen
 import com.training.e_cathering.Screens.CreateProductScreen.CreateProductScreen
@@ -49,7 +51,8 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   productViewModel: productViewModel = viewModel(),
                   productDetailViewModel : ProductDetailViewModel= viewModel(),
                   catheringListViewModel: CatheringListViewModel = viewModel(),
-                  catheringDetailViewModel: CatheringDetailViewModel = viewModel()) {
+                  catheringDetailViewModel: CatheringDetailViewModel = viewModel(),
+                  catheringProfileViewModel: CatheringProfileViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -107,7 +110,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         bottomBar = { UserPageBottomNavigation(navController = navController, bottomBarState) }
     ) {
 
-        NavHost(navController=navController, startDestination = NavigationEnum.LoginScreenActivity.name){
+        NavHost(navController=navController, startDestination = NavigationEnum.HomeScreenActivity.name){
 
             composable(NavigationEnum.SplashScreenActivity.name){
                 SplashScreenActivity(navController)
@@ -169,6 +172,10 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             composable(NavigationEnum.SettingScreenActivity.name){
                 SettingScreenActivity()
             }
+            composable(NavigationEnum.CatheringProfileScreenActivity.name){
+               CatheringProfileScreen( catheringProfileViewModel)
+                 }
+
         }
 
     }
