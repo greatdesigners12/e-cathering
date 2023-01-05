@@ -70,9 +70,16 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
         viewModel.loginStatus.collect{
             if(it.data != null){
                 if(it.data!!.message == "login berhasil"){
-                    alertDialogMsg.value = "Login berhasil"
-                    showAlertDialog.value = true
-                   viewModel.setCredential(it.data!!, dataStore, navController)
+                    if(it.data!!.role == "cathering"){
+                        Log.d(TAG, "LoginScreenActivity: this is cathering account")
+                    }else if(it.data!!.role == "admin"){
+                        
+                    }else{
+                        alertDialogMsg.value = "Login berhasil"
+                        showAlertDialog.value = true
+                        viewModel.setCredential(it.data!!, dataStore, navController)
+                    }
+                    
 
 
                 }else{
@@ -123,7 +130,7 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
             Button(onClick = {
                 loadingProgress.value = true
-                val user = User(emailInput.value, passwordInput.value, "user")
+                val user = User(emailInput.value, passwordInput.value)
                 viewModel.login(user)
             }) {
                 if(loadingProgress.value){

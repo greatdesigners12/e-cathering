@@ -36,7 +36,7 @@ class AuthRepository @Inject constructor(private val authApi: AuthAPI) {
             Log.d(TAG, "login: success")
         }catch(e : Exception){
             data.e = e
-            data.data = LoginJwtToken("","","",null)
+            data.data = LoginJwtToken("","","",null, "")
             Log.d(TAG, "login: ${e.message}")
         }
         return data

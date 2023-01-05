@@ -43,6 +43,7 @@ import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailViewMod
 import com.training.e_cathering.Screens.RegisterScreen.RegisterViewModel
 import com.training.e_cathering.Screens.RegisterScreen.RegisterScreenActivity
 import com.training.e_cathering.Screens.SettingScreenActivity.SettingScreenActivity
+import com.training.e_cathering.Screens.SettingScreenActivity.SettingViewModel
 import com.training.e_cathering.Screens.SplashScreenActivity
 import com.training.e_cathering.Screens.TransactionDetailScreen.TransactionDetailActivity
 import com.training.e_cathering.Screens.TransactionDetailScreen.TransactionDetailViewModel
@@ -57,7 +58,8 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   catheringDetailViewModel: CatheringDetailViewModel = viewModel(),
                     cartDetailViewModel: CartDetailViewModel = viewModel(),
                   transactionViewModel: HistoryTransactionViewModel = viewModel(),
-                    transactionDetailViewModel: TransactionDetailViewModel = viewModel()) {
+                    transactionDetailViewModel: TransactionDetailViewModel = viewModel(),
+                    settingViewModel: SettingViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -192,7 +194,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             }
 
             composable(NavigationEnum.SettingScreenActivity.name){
-                SettingScreenActivity()
+                SettingScreenActivity(navController, settingViewModel)
             }
         }
 
