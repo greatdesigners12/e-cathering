@@ -12,6 +12,8 @@ data class Product(
     val deskripsi: String,
     @SerializedName("harga")
     val harga: Int,
+    @SerializedName("type")
+    val type: String,
     @SerializedName("image_url")
     var image: String,
     @SerializedName("nama")

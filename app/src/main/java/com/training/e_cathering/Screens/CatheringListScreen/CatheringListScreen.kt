@@ -81,9 +81,12 @@ fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (Product) 
                     Spacer(modifier = Modifier.width(5.dp))
 
                     Text(DecimalFormat("#.##").format(cathering.average_rating).toString())
+
+
                 }
                 Spacer(Modifier.height(5.dp))
                 Text(cathering.deskripsi, fontSize = 10.sp)
+
 
             }
         }

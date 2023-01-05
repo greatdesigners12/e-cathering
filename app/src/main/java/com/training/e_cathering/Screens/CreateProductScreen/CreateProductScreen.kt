@@ -80,7 +80,7 @@ fun CreateProductScreen(viewModel: productViewModel) {
         Button(onClick = {
 
             pickedImage.value?.let {
-                viewModel.createProduct(Product(null,"2", inputDeskripsiProduk.value, inputHargaProduk.value.toInt(), "", inputNamaProduk.value), dataStore.getToken,
+                viewModel.createProduct(Product(null,"2", inputDeskripsiProduk.value, inputHargaProduk.value.toInt(), "daily", "", inputNamaProduk.value), dataStore.getToken,
                     it
                 )
             }

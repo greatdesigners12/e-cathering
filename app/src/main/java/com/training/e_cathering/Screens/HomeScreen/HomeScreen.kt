@@ -1,7 +1,6 @@
 package com.training.e_cathering.Screens.HomeScreen
 
-import android.content.ContentValues.TAG
-import android.util.Log
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -36,6 +36,8 @@ import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.Category
 import com.training.e_cathering.Models.Cathering
 import com.training.e_cathering.Navigation.NavigationEnum
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @Composable
@@ -43,6 +45,8 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
     val searchInput = remember{
         mutableStateOf("")
     }
+
+
 
     val allCatheringList = remember{
         mutableStateListOf<Cathering>()
@@ -52,13 +56,14 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
         mutableStateListOf<Category>()
     }
 
-
     val dataStore = DataStoreInstance(LocalContext.current)
+    val context = LocalContext.current
+
+
 
     LaunchedEffect(key1 = true){
         homeViewModel.getAllCatherings()
         homeViewModel.getAllCategories(dataStore.getToken)
-
     }
     LaunchedEffect(key1 = homeViewModel.catheringList.collectAsState(initial = null).value){
 
@@ -219,29 +224,37 @@ fun CatheringCard(data : Cathering, cardClick : () -> Unit){
     }
 }
 
-@Composable
-fun CategoryCard(data : Category, onClick : (String) -> Unit){
-    Card(modifier = Modifier
-        .width(100.dp)
-        .height(100.dp).clickable {
-            onClick(data.namaKategori)
-        }){
-        Column(horizontalAlignment = Alignment.CenterHorizontally){
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(data.image)
-                    .crossfade(true)
-                    .build(),
-                modifier = Modifier.height(75.dp),
-                contentDescription = "Category image",
-                contentScale = ContentScale.Fit,
-            )
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                Text(data.namaKategori, textAlign = TextAlign.Center)
+    @Composable
+    fun CategoryCard(data : Category, onClick : (String) -> Unit){
+        Card(modifier = Modifier
+            .width(100.dp)
+            .height(100.dp)
+            .clickable {
+                onClick(data.namaKategori)
+            }){
+            Column(horizontalAlignment = Alignment.CenterHorizontally){
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(data.image)
+                        .crossfade(true)
+                        .build(),
+                    modifier = Modifier.height(75.dp),
+                    contentDescription = "Category image",
+                    contentScale = ContentScale.Fit,
+                )
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                    Text(data.namaKategori, textAlign = TextAlign.Center)
+                }
+
             }
 
-        }
+    }
+
+
+
+
+
+
 
     }
-}
 

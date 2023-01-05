@@ -25,10 +25,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.*
+import com.training.e_cathering.Navigation.NavigationEnum
 import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailViewModel
 import com.training.e_cathering.ui.theme.EcatheringTheme
 
@@ -156,7 +158,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
                     text = { Text(text = "Pesan Sekarang") },
                     // on below line we are adding click listener.
                     onClick = {
-                        Toast.makeText(curContext, "Extended Floating Action Button", Toast.LENGTH_SHORT).show()
+                         navController.navigate(NavigationEnum.CartDetailActivity.name + "/" + id)
                     },
                     // on below line adding
                     // a background color.

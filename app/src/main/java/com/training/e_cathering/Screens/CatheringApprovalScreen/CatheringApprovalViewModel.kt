@@ -1,5 +1,7 @@
 package com.training.e_cathering.Screens.CatheringApprovalScreen
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.e_cathering.Models.Cathering
@@ -16,22 +18,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CatheringApprovalViewModel @Inject constructor(val catheringRepository: CatheringRepository) : ViewModel() {
-    private val _catheringList = MutableSharedFlow<Response<CatheringWithRating>>()
+    private val _catheringList = MutableSharedFlow<List<Cathering>>()
     val catheringList = _catheringList.asSharedFlow()
     private val _catheringData = MutableSharedFlow<Cathering>()
     val catheringData = _catheringData.asSharedFlow()
 
-    fun getCatheringBasedOnGenre(genre : String, token : Flow<String?>){
-        viewModelScope.launch(Dispatchers.IO){
-            token.collect{
-                if(it != null){
-                    catheringRepository.getAllCatheringsByGenre(genre, it).data?.let { it1 ->
-                        _catheringList.emit(
-                            it1
-                        )
-                    }
-                }
+    fun getAllCatherings() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try{
+                catheringRepository.getAllCatherings().data?.data?.let { _catheringList.emit(it) }
+            }catch (e : java.lang.Exception){
+                Log.d(ContentValues.TAG, "getAllCathering: ${e.message}")
             }
+
 
         }
     }

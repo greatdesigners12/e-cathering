@@ -15,6 +15,7 @@ enum class NavigationEnum {
     HistoryScreenActivity,
     SettingScreenActivity,
     CatheringProfileScreenActivity,
+    CatheringApprovalScreenActivity,
 
 
 }

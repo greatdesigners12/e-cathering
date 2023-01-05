@@ -1,6 +1,8 @@
 package com.training.e_cathering.Screens.CatheringApprovalScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,33 +19,76 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.e_cathering.DataStoreInstance
+import com.training.e_cathering.Models.Cathering
 import com.training.e_cathering.Models.CatheringWithRating
 import com.training.e_cathering.Models.Product
+import com.training.e_cathering.Navigation.NavigationEnum
 import com.training.e_cathering.R
+import com.training.e_cathering.Screens.HomeScreen.CatheringCard
 import java.text.DecimalFormat
 
 @Composable
-fun CatheringApprovalScreen(genre : String,viewModel: CatheringApprovalViewModel) {
-    val catheringList = remember{
-        mutableStateListOf<CatheringWithRating>()
+fun CatheringApprovalScreen(viewModel: CatheringApprovalViewModel) {
+
+    val allCatheringList = remember{
+        mutableStateListOf<Cathering>()
     }
 
     val dataStore = DataStoreInstance(LocalContext.current)
 
     LaunchedEffect(key1 = true){
-        viewModel.getCatheringBasedOnGenre(genre, dataStore.getToken)
+        viewModel.getAllCatherings()
     }
 
-    LaunchedEffect(key1 = viewModel.catheringList.collectAsState(initial = "").value){
+    LaunchedEffect(key1 = viewModel.catheringList.collectAsState(initial = null).value){
+
         viewModel.catheringList.collect{
-            catheringList.addAll(it.data)
+            if(it != null){
+                allCatheringList.clear()
+                allCatheringList.addAll(it)
+            }else{
+                allCatheringList.clear()
+            }
+
         }
+
+
     }
 
     LazyColumn(modifier = Modifier.padding(10.dp)){
 
-        items(items=catheringList){cathering ->
+        items(items=allCatheringList){cathering ->
             CatheringCardHorizontal(cathering = cathering){
+                if (cathering.isVerified==1) {
+                    viewModel.updateVerifiedCathering(
+                        Cathering(
+                            cathering.deskripsi,
+                            cathering.id,
+                            cathering.imageLogo,
+                            cathering.imageMenu,
+                            0,
+                            cathering.nama,
+                            cathering.tanggalRegister,
+                            cathering.userId
+                        ), cathering.userId,
+                        dataStore.getToken
+                    )
+
+                }else{
+                    viewModel.updateVerifiedCathering(
+                        Cathering(
+                            cathering.deskripsi,
+                            cathering.id,
+                            cathering.imageLogo,
+                            cathering.imageMenu,
+                            1,
+                            cathering.nama,
+                            cathering.tanggalRegister,
+                            cathering.userId
+                        ), cathering.userId,
+                        dataStore.getToken
+                    )
+                }
 
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -52,9 +97,11 @@ fun CatheringApprovalScreen(genre : String,viewModel: CatheringApprovalViewModel
 }
 
 @Composable
-fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (Product) -> Unit){
+fun CatheringCardHorizontal(cathering: Cathering,  cardClick : () -> Unit){
     Card(modifier = Modifier
-        .fillMaxWidth()) {
+        .fillMaxWidth().clickable{
+            cardClick()
+        }) {
         Row() {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -73,13 +120,17 @@ fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (Product) 
                 Text(text = cathering.nama, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(Modifier.height(5.dp))
                 Row(){
-                    Image(painter = painterResource(id = R.drawable.ic_baseline_star), contentDescription = "")
-                    Spacer(modifier = Modifier.width(5.dp))
 
-                    Text(DecimalFormat("#.##").format(cathering.average_rating).toString())
+                    Spacer(modifier = Modifier.width(10.dp))
+                    if (cathering.isVerified.equals(1)){
+                        Text("Verified")
+                    }else{
+                        Text("UnVerified")
+                    }
                 }
                 Spacer(Modifier.height(5.dp))
                 Text(cathering.deskripsi, fontSize = 10.sp)
+                Spacer(Modifier.height(5.dp))
 
             }
         }

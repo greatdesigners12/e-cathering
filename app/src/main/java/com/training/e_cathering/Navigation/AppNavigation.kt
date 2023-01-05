@@ -22,6 +22,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.training.e_cathering.Components.UserPageBottomNavigation
+import com.training.e_cathering.Screens.CartDetailActivity.CartDetailActivity
+import com.training.e_cathering.Screens.CartDetailActivity.CartDetailViewModel
+import com.training.e_cathering.Screens.CatheringApprovalScreen.CatheringApprovalScreen
+import com.training.e_cathering.Screens.CatheringApprovalScreen.CatheringApprovalViewModel
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailScreen
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailViewModel
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListScreen
@@ -52,7 +56,9 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   productDetailViewModel : ProductDetailViewModel= viewModel(),
                   catheringListViewModel: CatheringListViewModel = viewModel(),
                   catheringDetailViewModel: CatheringDetailViewModel = viewModel(),
-                  catheringProfileViewModel: CatheringProfileViewModel = viewModel()) {
+                  catheringProfileViewModel: CatheringProfileViewModel = viewModel(),
+                  cartDetailViewModel: CartDetailViewModel = viewModel(),
+                  catheringApprovalViewModel: CatheringApprovalViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -64,8 +70,8 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
     when (navBackStackEntry?.destination?.route) {
         NavigationEnum.HistoryScreenActivity.name -> {
             // Show BottomBar and TopBar
-            bottomBarState.value = false
-            appBarState.value = true
+            bottomBarState.value = true
+            appBarState.value = false
         }
         NavigationEnum.HomeScreenActivity.name -> {
             // Show BottomBar and TopBar
@@ -110,7 +116,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         bottomBar = { UserPageBottomNavigation(navController = navController, bottomBarState) }
     ) {
 
-        NavHost(navController=navController, startDestination = NavigationEnum.HomeScreenActivity.name){
+        NavHost(navController=navController, startDestination = NavigationEnum.CatheringApprovalScreenActivity.name){
 
             composable(NavigationEnum.SplashScreenActivity.name){
                 SplashScreenActivity(navController)
@@ -148,7 +154,13 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                 navArgument("catheringId"){type = NavType.StringType}
             )){
                 it.arguments?.getString("catheringId")
-                    ?.let { it1 -> ProductDetailScreen(navController, it1, productDetailViewModel) }
+                    ?.let { it1 ->
+                        CartDetailActivity(
+                            navController,
+                            it1,
+                            cartDetailViewModel
+                        )
+                    }
             }
 
             composable(NavigationEnum.CatheringDetailActivity.name + "/{catheringId}", arguments = listOf(
@@ -175,7 +187,9 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             composable(NavigationEnum.CatheringProfileScreenActivity.name){
                CatheringProfileScreen( catheringProfileViewModel)
                  }
-
+            composable(NavigationEnum.CatheringApprovalScreenActivity.name){
+                CatheringApprovalScreen(catheringApprovalViewModel)
+            }
         }
 
     }

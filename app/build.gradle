@@ -65,6 +65,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.midtrans:uikit:1.34.0-SANDBOX'
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation 'androidx.core:core-ktx:1.7.0'

@@ -19,6 +19,23 @@ data class CartWithRelationship(
     val user_id: Int
 )
 
+data class CartRelationshipWithUserInformation(
+    @SerializedName("Cathering")
+    val Cathering: Cathering,
+    @SerializedName("Product")
+    val Product: Product,
+    @SerializedName("User")
+    val User: DataUser,
+    @SerializedName("cathering_id")
+    val cathering_id: Int,
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("product_id")
+    val product_id: Int,
+    @SerializedName("user_id")
+    val user_id: Int
+)
+
 data class Cart(
     @SerializedName("id")
     val id: Int?,

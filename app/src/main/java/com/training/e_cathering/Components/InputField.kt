@@ -38,7 +38,7 @@ fun basicInputField(label : String, inputValue : String, keyboardType: KeyboardT
 
 @Composable
 fun textInputField(label : String, inputValue : String, keyboardType: KeyboardType = KeyboardType.Text, onValueChanged : (String) -> Unit){
-    OutlinedTextField(value = inputValue, onValueChanged, singleLine = false, label= { Text(label) }, modifier = Modifier.fillMaxWidth().height(150.dp), keyboardOptions = KeyboardOptions(keyboardType = keyboardType), colors = TextFieldDefaults.textFieldColors(
+    OutlinedTextField(value = inputValue, onValueChanged, singleLine = false, label= { Text(label) }, modifier = Modifier.fillMaxWidth().height(100.dp), keyboardOptions = KeyboardOptions(keyboardType = keyboardType), colors = TextFieldDefaults.textFieldColors(
         backgroundColor = MaterialTheme.colors.background
     ))
 }

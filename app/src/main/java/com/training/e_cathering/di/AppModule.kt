@@ -47,4 +47,10 @@ class AppModule {
         return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CartAPI::class.java)
     }
 
+    @Singleton
+    @Provides
+    fun provideTransactionAPI() : TransactionAPI {
+        return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(TransactionAPI::class.java)
+    }
+
 }
