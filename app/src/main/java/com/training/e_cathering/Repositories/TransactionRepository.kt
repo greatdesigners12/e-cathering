@@ -23,12 +23,12 @@ class TransactionRepository @Inject constructor(val transactionAPI : Transaction
         return data
     }
 
-    suspend fun getTransactionGroupById(user_id: String, token : String) : DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception> {
+    suspend fun getTransactionGroupById(id: Int, token : String) : DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception> {
         val data = DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception>()
         data.loading = true
         try{
 
-            data.data = transactionAPI.getTransactionGroup(user_id.toInt(), token)
+            data.data = transactionAPI.getTransactionGroup(id, token)
             Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
             data.loading = false
         }catch(e : Exception){

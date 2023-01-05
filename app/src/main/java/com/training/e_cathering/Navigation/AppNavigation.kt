@@ -33,6 +33,7 @@ import com.training.e_cathering.Screens.CreateFrozenFoodScreen.CreateFrozenFoodS
 import com.training.e_cathering.Screens.CreateProductScreen.CreateProductScreen
 import com.training.e_cathering.Screens.CreateProductScreen.productViewModel
 import com.training.e_cathering.Screens.HistoryScreenActivity.HistoryScreenActivity
+import com.training.e_cathering.Screens.HistoryScreenActivity.HistoryTransactionViewModel
 import com.training.e_cathering.Screens.HomeScreen.HomeScreenActivity
 import com.training.e_cathering.Screens.HomeScreen.HomeViewModel
 import com.training.e_cathering.Screens.LoginScreen.LoginScreenActivity
@@ -43,6 +44,8 @@ import com.training.e_cathering.Screens.RegisterScreen.RegisterViewModel
 import com.training.e_cathering.Screens.RegisterScreen.RegisterScreenActivity
 import com.training.e_cathering.Screens.SettingScreenActivity.SettingScreenActivity
 import com.training.e_cathering.Screens.SplashScreenActivity
+import com.training.e_cathering.Screens.TransactionDetailScreen.TransactionDetailActivity
+import com.training.e_cathering.Screens.TransactionDetailScreen.TransactionDetailViewModel
 
 @Composable
 fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
@@ -52,7 +55,9 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   productDetailViewModel : ProductDetailViewModel= viewModel(),
                   catheringListViewModel: CatheringListViewModel = viewModel(),
                   catheringDetailViewModel: CatheringDetailViewModel = viewModel(),
-                    cartDetailViewModel: CartDetailViewModel = viewModel()) {
+                    cartDetailViewModel: CartDetailViewModel = viewModel(),
+                  transactionViewModel: HistoryTransactionViewModel = viewModel(),
+                    transactionDetailViewModel: TransactionDetailViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -86,6 +91,11 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         }
 
         NavigationEnum.CatheringListActivity.name + "/{genre}" -> {
+            bottomBarState.value = false
+            appBarState.value = true
+        }
+
+        NavigationEnum.TransactionDetailActivity.name + "/{transactionId}" -> {
             bottomBarState.value = false
             appBarState.value = true
         }
@@ -127,7 +137,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             composable(NavigationEnum.CatheringListActivity.name + "/{genre}", arguments = listOf(
                 navArgument("genre"){type = NavType.StringType})){
                 it.arguments?.getString("genre")
-                    ?.let { it1 -> CatheringListScreen(it1, catheringListViewModel) }
+                    ?.let { it1 -> CatheringListScreen(navController ,it1, catheringListViewModel) }
             }
 
             composable(NavigationEnum.RegisterScreenActivity.name){
@@ -172,7 +182,13 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             }
 
             composable(NavigationEnum.HistoryScreenActivity.name){
-                HistoryScreenActivity()
+                HistoryScreenActivity(navController, transactionViewModel)
+            }
+
+            composable(NavigationEnum.TransactionDetailActivity.name + "/{transactionId}", arguments = listOf(
+                navArgument("transactionId"){type = NavType.StringType}
+            )){
+                it.arguments?.getString("transactionId")?.let { it1 -> TransactionDetailActivity(navController = navController, id = it1, viewModel = transactionDetailViewModel) }
             }
 
             composable(NavigationEnum.SettingScreenActivity.name){
