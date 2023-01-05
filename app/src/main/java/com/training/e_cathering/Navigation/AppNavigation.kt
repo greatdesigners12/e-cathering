@@ -22,6 +22,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.training.e_cathering.Components.UserPageBottomNavigation
+import com.training.e_cathering.Screens.CartDetailActivity.CartDetailActivity
+import com.training.e_cathering.Screens.CartDetailActivity.CartDetailViewModel
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailScreen
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailViewModel
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListScreen
@@ -49,7 +51,8 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   productViewModel: productViewModel = viewModel(),
                   productDetailViewModel : ProductDetailViewModel= viewModel(),
                   catheringListViewModel: CatheringListViewModel = viewModel(),
-                  catheringDetailViewModel: CatheringDetailViewModel = viewModel()) {
+                  catheringDetailViewModel: CatheringDetailViewModel = viewModel(),
+                    cartDetailViewModel: CartDetailViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -61,8 +64,8 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
     when (navBackStackEntry?.destination?.route) {
         NavigationEnum.HistoryScreenActivity.name -> {
             // Show BottomBar and TopBar
-            bottomBarState.value = false
-            appBarState.value = true
+            bottomBarState.value = true
+            appBarState.value = false
         }
         NavigationEnum.HomeScreenActivity.name -> {
             // Show BottomBar and TopBar
@@ -145,7 +148,13 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                 navArgument("catheringId"){type = NavType.StringType}
             )){
                 it.arguments?.getString("catheringId")
-                    ?.let { it1 -> ProductDetailScreen(navController, it1, productDetailViewModel) }
+                    ?.let { it1 ->
+                        CartDetailActivity(
+                            navController,
+                            it1,
+                            cartDetailViewModel
+                        )
+                    }
             }
 
             composable(NavigationEnum.CatheringDetailActivity.name + "/{catheringId}", arguments = listOf(

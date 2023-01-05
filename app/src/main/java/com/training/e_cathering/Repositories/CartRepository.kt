@@ -26,8 +26,8 @@ class CartRepository @Inject constructor(private val cartAPI: CartAPI) {
         return data
     }
 
-    suspend fun getAllProductCart(user_id: Int, cathering_id: Int, token: String) : DataAPIWrapper<Response<CartWithRelationship>, Boolean, Exception>{
-        val data = DataAPIWrapper<Response<CartWithRelationship>, Boolean, Exception>()
+    suspend fun getAllProductCart(user_id: Int, cathering_id: Int, token: String) : DataAPIWrapper<Response<CartRelationshipWithUserInformation>, Boolean, Exception>{
+        val data = DataAPIWrapper<Response<CartRelationshipWithUserInformation>, Boolean, Exception>()
         data.loading = true
         try{
             data.data = cartAPI.getAllCartProduct(user_id, cathering_id, token)
