@@ -8,6 +8,7 @@ enum class NavigationEnum {
     CatheringDetailActivity,
     CartDetailActivity,
     TransactionDetailActivity,
+    ResetPasswordActivity,
     CatheringListActivity,
     CreateProductActivity,
     CreateFrozenFoodActivity,

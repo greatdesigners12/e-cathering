@@ -66,8 +66,8 @@ fun ImagePickerView(
 
 
 @Composable
-fun passwordInputField(inputValue : String, passwordVisible : Boolean, pwdIcon : () -> Unit, onValueChanged : (String) -> Unit){
-    OutlinedTextField(value = inputValue, onValueChanged, modifier = Modifier.fillMaxWidth(), singleLine = true, label= {Text("Password")},
+fun passwordInputField(label: String = "Password" ,inputValue : String, passwordVisible : Boolean, pwdIcon : () -> Unit, onValueChanged : (String) -> Unit){
+    OutlinedTextField(value = inputValue,  onValueChanged, modifier = Modifier.fillMaxWidth(), singleLine = true, label= {Text(label)},
         visualTransformation = if(passwordVisible) VisualTransformation.None  else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {

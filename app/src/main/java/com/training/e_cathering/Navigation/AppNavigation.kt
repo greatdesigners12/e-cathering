@@ -42,6 +42,8 @@ import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailScreen
 import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailViewModel
 import com.training.e_cathering.Screens.RegisterScreen.RegisterViewModel
 import com.training.e_cathering.Screens.RegisterScreen.RegisterScreenActivity
+import com.training.e_cathering.Screens.ResetPasswordScreen.ResetPasswordActivity
+import com.training.e_cathering.Screens.ResetPasswordScreen.ResetPasswordViewModel
 import com.training.e_cathering.Screens.SettingScreenActivity.SettingScreenActivity
 import com.training.e_cathering.Screens.SettingScreenActivity.SettingViewModel
 import com.training.e_cathering.Screens.SplashScreenActivity
@@ -59,7 +61,8 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     cartDetailViewModel: CartDetailViewModel = viewModel(),
                   transactionViewModel: HistoryTransactionViewModel = viewModel(),
                     transactionDetailViewModel: TransactionDetailViewModel = viewModel(),
-                    settingViewModel: SettingViewModel = viewModel()) {
+                    settingViewModel: SettingViewModel = viewModel(),
+                  resetPasswordViewModel: ResetPasswordViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -100,6 +103,16 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         NavigationEnum.TransactionDetailActivity.name + "/{transactionId}" -> {
             bottomBarState.value = false
             appBarState.value = true
+        }
+
+        NavigationEnum.ResetPasswordActivity.name -> {
+            bottomBarState.value = false
+            appBarState.value = true
+        }
+
+        NavigationEnum.SettingScreenActivity.name -> {
+            bottomBarState.value = true
+            appBarState.value = false
         }
 
     }
@@ -195,6 +208,10 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
 
             composable(NavigationEnum.SettingScreenActivity.name){
                 SettingScreenActivity(navController, settingViewModel)
+            }
+
+            composable(NavigationEnum.ResetPasswordActivity.name){
+                ResetPasswordActivity(navController, resetPasswordViewModel)
             }
         }
 

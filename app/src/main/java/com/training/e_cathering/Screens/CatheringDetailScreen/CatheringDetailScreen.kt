@@ -202,7 +202,7 @@ fun productCardHorizontal(product: Product, buttonText : String, onClick : (Prod
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.fillMaxWidth(0.7f)) {
                 Text(text = product.nama, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(2.dp))
                 Text(product.deskripsi, fontSize = 18.sp)
                 
             }

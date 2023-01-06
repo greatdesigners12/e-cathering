@@ -3,6 +3,7 @@ package com.training.e_cathering.Screens.TransactionDetailScreen
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -55,7 +56,6 @@ fun TransactionDetailActivity(navController: NavController, id : String ,viewMod
     }
 
     LaunchedEffect(key1 = true){
-        Log.d(TAG, "TransactionDetailActivity: awdawdaw")
         viewModel.getTransactionGroupById(id.toInt(), dataStore.getToken)
 
 
@@ -132,80 +132,105 @@ fun TransactionDetailActivity(navController: NavController, id : String ,viewMod
 
             }
             item{
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 10.dp), contentAlignment = Alignment.BottomCenter){
-                    ExtendedFloatingActionButton(
-                        // on below line we are setting text for our fab
-                        text = { Text(text = "Pay Now") },
-                        // on below line we are adding click listener.
-                        onClick = {
-                            val sdk = SdkUIFlowBuilder.init()
-                                .setClientKey(Constant.client_key) // client_key is mandatory
-                                .setContext(context) // context is mandatory
-                                .setTransactionFinishedCallback {
-                                    // Handle finished transaction here.
-                                } // set transaction finish callback (sdk callback)
-                                .setMerchantBaseUrl(Constant.midtrans_base_url) //set merchant url (required)
-                                .enableLog(true) // enable sdk log (optional)
-                                .setColorTheme(
-                                    CustomColorTheme(
-                                        "#FFE51255",
-                                        "#B61548",
-                                        "#FFE51255"
+                if(curData.value!!.status == "Belum terbayar"){
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 10.dp), contentAlignment = Alignment.BottomCenter){
+                        ExtendedFloatingActionButton(
+                            // on below line we are setting text for our fab
+                            text = { Text(text = "Pay Now") },
+                            // on below line we are adding click listener.
+                            onClick = {
+                                val sdk = SdkUIFlowBuilder.init()
+                                    .setClientKey(Constant.client_key) // client_key is mandatory
+                                    .setContext(context) // context is mandatory
+                                    .setTransactionFinishedCallback {
+                                        // Handle finished transaction here.
+                                    } // set transaction finish callback (sdk callback)
+                                    .setMerchantBaseUrl(Constant.midtrans_base_url) //set merchant url (required)
+                                    .enableLog(true) // enable sdk log (optional)
+                                    .setColorTheme(
+                                        CustomColorTheme(
+                                            "#FFE51255",
+                                            "#B61548",
+                                            "#FFE51255"
+                                        )
+                                    ) // set theme. it will replace theme on snap theme on MAP ( optional)
+                                    .buildSDK()
+                                val transactionRequest =
+                                    com.midtrans.sdk.corekit.core.TransactionRequest(
+                                        "awdawdaw",
+                                        curData!!.value!!.totalPrice.toDouble()
                                     )
-                                ) // set theme. it will replace theme on snap theme on MAP ( optional)
-                                .buildSDK()
-                            val transactionRequest =
-                                com.midtrans.sdk.corekit.core.TransactionRequest(
-                                    "awdawdaw",
-                                    curData!!.value!!.totalPrice.toDouble()
-                                )
-                            val customerDetails = CustomerDetails()
-                            customerDetails.setCustomerIdentifier(curData!!.value?.User?.email)
+                                val customerDetails = CustomerDetails()
+                                customerDetails.setCustomerIdentifier(curData!!.value?.User?.email)
 
-                            customerDetails.setFirstName(curData!!.value?.User?.email)
-                            customerDetails.setLastName(curData!!.value?.User?.email)
-                            customerDetails.setEmail(curData!!.value?.User?.email)
+                                customerDetails.setFirstName(curData!!.value?.User?.email)
+                                customerDetails.setLastName(curData!!.value?.User?.email)
+                                customerDetails.setEmail(curData!!.value?.User?.email)
 
-                            val shippingAddress = ShippingAddress()
-                            shippingAddress.address = curData.value!!.full_address
+                                val shippingAddress = ShippingAddress()
+                                shippingAddress.address = curData.value!!.full_address
 
-                            customerDetails.setShippingAddress(shippingAddress)
+                                customerDetails.setShippingAddress(shippingAddress)
 
-                            val billingAddress = BillingAddress()
-                            billingAddress.address = curData.value!!.full_address
+                                val billingAddress = BillingAddress()
+                                billingAddress.address = curData.value!!.full_address
 
-                            customerDetails.setBillingAddress(billingAddress)
+                                customerDetails.setBillingAddress(billingAddress)
 
-                            val itemDetailsList: ArrayList<ItemDetails> = ArrayList()
+                                val itemDetailsList: ArrayList<ItemDetails> = ArrayList()
 
-                            for(item in curData.value!!.transactionGroupRelation){
-                                itemDetailsList.add(ItemDetails(item.transactionProductId.toString(),
-                                    item.transactionProduct.price.toDouble(), item.transactionProduct.time, item.transactionProduct.name))
+                                for(item in curData.value!!.transactionGroupRelation){
+                                    itemDetailsList.add(ItemDetails(item.transactionProductId.toString(),
+                                        item.transactionProduct.price.toDouble(), item.transactionProduct.time, item.transactionProduct.name))
 
-                            }
+                                }
 
 
-                            transactionRequest.itemDetails = itemDetailsList
-                            transactionRequest.setCustomerDetails(customerDetails)
-                            val billInfoModel = BillInfoModel("BILL_INFO_KEY", "BILL_INFO_VALUE")
+                                transactionRequest.itemDetails = itemDetailsList
+                                transactionRequest.setCustomerDetails(customerDetails)
+                                val billInfoModel = BillInfoModel("BILL_INFO_KEY", "BILL_INFO_VALUE")
 
-                            transactionRequest.billInfoModel = billInfoModel
-                            sdk.setTransactionRequest(transactionRequest)
-                            sdk.startPaymentUiFlow(context)
-                        },
-                        // on below line adding
-                        // a background color.
-                        backgroundColor = MaterialTheme.colors.primary,
-                        // on below line we are
-                        // adding a content color.
-                        contentColor = Color.White,
-                        // on below line we are
-                        // adding icon for our fab
-                        icon = { Icon(Icons.Filled.Add, "") }
-                    )
+                                transactionRequest.billInfoModel = billInfoModel
+                                sdk.setTransactionRequest(transactionRequest)
+                                sdk.startPaymentUiFlow(context)
+                            },
+                            // on below line adding
+                            // a background color.
+                            backgroundColor = MaterialTheme.colors.primary,
+                            // on below line we are
+                            // adding a content color.
+                            contentColor = Color.White,
+                            // on below line we are
+                            // adding icon for our fab
+                            icon = { Icon(Icons.Filled.Add, "") }
+                        )
+                    }
+                }else{
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 10.dp), contentAlignment = Alignment.BottomCenter){
+                        ExtendedFloatingActionButton(
+                            // on below line we are setting text for our fab
+                            text = { Text(text = "Pesanan akan diantar ke tempatmu") },
+                            // on below line we are adding click listener.
+                            onClick = {
+                               Toast.makeText(context, "Harap Menunggu", Toast.LENGTH_LONG)
+                            },
+                            // on below line adding
+                            // a background color.
+                            backgroundColor = MaterialTheme.colors.primary,
+                            // on below line we are
+                            // adding a content color.
+                            contentColor = Color.White,
+                            // on below line we are
+                            // adding icon for our fab
+                            icon = { Icon(Icons.Filled.Add, "") }
+                        )
+                    }
                 }
+
             }
         }
     }else{

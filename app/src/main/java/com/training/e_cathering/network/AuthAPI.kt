@@ -1,8 +1,6 @@
 package com.training.e_cathering.network
 
-import com.training.e_cathering.Models.Auth
-import com.training.e_cathering.Models.LoginJwtToken
-import com.training.e_cathering.Models.User
+import com.training.e_cathering.Models.*
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,4 +13,8 @@ interface AuthAPI {
 
     @POST("login")
     suspend fun login(@Body user : User) : LoginJwtToken
+
+    @POST("resetPassword")
+    suspend fun resetPassword(@Body request : ResetPasswordRequest) : SingleResponseData<User>
+
 }
