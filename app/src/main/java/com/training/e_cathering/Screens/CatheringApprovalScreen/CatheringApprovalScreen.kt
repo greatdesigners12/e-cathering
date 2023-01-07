@@ -36,7 +36,7 @@ fun CatheringApprovalScreen(viewModel: CatheringApprovalViewModel) {
         mutableStateListOf<Cathering>()
     }
 
-    val dataStore = DataStoreInstance(LocalContext.current)
+
 
     LaunchedEffect(key1 = true){
         viewModel.getAllCatherings()
@@ -56,78 +56,20 @@ fun CatheringApprovalScreen(viewModel: CatheringApprovalViewModel) {
 
 
     }
-    val mContext = LocalContext.current
+
     Column(modifier = Modifier.fillMaxSize()){
         Box( modifier = Modifier.fillMaxWidth().padding(top=16.dp,bottom=4.dp, start = 16.dp, end = 16.dp)){
             Text(text = "Cathering Admin Approval",fontWeight = FontWeight.Bold, style= MaterialTheme.typography.h4,modifier = Modifier.padding(start = 8.dp))
         }
+
     LazyColumn(modifier = Modifier.padding(10.dp)){
 
         items(items=allCatheringList){cathering ->
-            CatheringCardHorizontal(cathering = cathering){
-
-
-            }
-            if (cathering.isVerified=="1") {
-
-            Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFAD1919)),onClick = {
-
-                viewModel.updateVerifiedCathering(
-                    Cathering(
-                        cathering.deskripsi,
-                        cathering.id,
-                        cathering.imageLogo,
-                        cathering.imageMenu,
-                        "0",
-                        cathering.nama,
-                        cathering.tanggalRegister,
-                        cathering.userId
-                    ), cathering.userId,
-                    dataStore.getToken
-                )
-
-
-
-
-                Toast.makeText(mContext, "Cathering Berhasil Di Edit", Toast.LENGTH_SHORT).show()
-
-            }) {
-
-                    Text(text = "Disapprove", fontSize = 10.sp, color = Color.White)
+            CatheringCardHorizontal(cathering = cathering, viewModel){
 
 
             }
 
-
-        }else{
-                Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF46A240)),onClick = {
-
-                    viewModel.updateVerifiedCathering(
-                        Cathering(
-                            cathering.deskripsi,
-                            cathering.id,
-                            cathering.imageLogo,
-                            cathering.imageMenu,
-                            "1",
-                            cathering.nama,
-                            cathering.tanggalRegister,
-                            cathering.userId
-                        ), cathering.userId,
-                        dataStore.getToken
-                    )
-
-
-
-
-                    Toast.makeText(mContext, "Cathering Berhasil Di Edit", Toast.LENGTH_SHORT).show()
-
-                }) {
-
-                    Text(text = "Approve", fontSize = 10.sp, color = Color.White)
-
-
-                }
-            }
 
 
 
@@ -138,11 +80,13 @@ fun CatheringApprovalScreen(viewModel: CatheringApprovalViewModel) {
 }
 
 @Composable
-fun CatheringCardHorizontal(cathering: Cathering,  cardClick : () -> Unit){
+fun CatheringCardHorizontal(cathering: Cathering,  viewModel: CatheringApprovalViewModel, cardClick : () -> Unit, ){
     Card(modifier = Modifier
         .fillMaxWidth().clickable{
             cardClick()
         }) {
+        val dataStore = DataStoreInstance(LocalContext.current)
+        val mContext = LocalContext.current
         Row() {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -173,6 +117,68 @@ fun CatheringCardHorizontal(cathering: Cathering,  cardClick : () -> Unit){
                 Text(cathering.deskripsi, fontSize = 10.sp)
                 Spacer(Modifier.height(5.dp))
 
+            }
+            if (cathering.isVerified=="1") {
+
+                Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFAD1919)),modifier = Modifier
+                    .defaultMinSize(minWidth = 0.dp, minHeight = 1.dp), contentPadding = PaddingValues(14.dp),onClick = {
+
+                    viewModel.updateVerifiedCathering(
+                        Cathering(
+                            cathering.deskripsi,
+                            cathering.id,
+                            cathering.imageLogo,
+                            cathering.imageMenu,
+                            "0",
+                            cathering.nama,
+                            cathering.tanggalRegister,
+                            cathering.userId
+                        ), cathering.userId,
+                        dataStore.getToken
+                    )
+
+
+
+
+                    Toast.makeText(mContext, "Cathering Berhasil Di Edit", Toast.LENGTH_SHORT).show()
+
+                }) {
+
+                    Text(text = "Disapprove", fontSize = 10.sp, color = Color.White)
+
+
+                }
+
+
+            }else{
+                Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF46A240)),modifier = Modifier
+                    .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp),contentPadding = PaddingValues(14.dp),onClick = {
+
+                    viewModel.updateVerifiedCathering(
+                        Cathering(
+                            cathering.deskripsi,
+                            cathering.id,
+                            cathering.imageLogo,
+                            cathering.imageMenu,
+                            "1",
+                            cathering.nama,
+                            cathering.tanggalRegister,
+                            cathering.userId
+                        ), cathering.userId,
+                        dataStore.getToken
+                    )
+
+
+
+
+                    Toast.makeText(mContext, "Cathering Berhasil Di Edit", Toast.LENGTH_SHORT).show()
+
+                }) {
+
+                    Text(text = "Approve", fontSize = 10.sp, color = Color.White)
+
+
+                }
             }
         }
     }

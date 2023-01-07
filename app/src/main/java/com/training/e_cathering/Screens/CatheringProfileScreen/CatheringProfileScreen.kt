@@ -112,7 +112,7 @@ fun CatheringProfileScreen(viewModel: CatheringProfileViewModel){
 
                 Toast.makeText(mContext, "Profile Berhasil Di Edit", Toast.LENGTH_SHORT).show()
             }) {
-                Text(text = "Kirim")
+                Text(text = "Ubah Cathering Profile")
             }
         }
     }
