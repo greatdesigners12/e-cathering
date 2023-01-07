@@ -106,7 +106,7 @@ fun CatheringProfileScreen(viewModel: CatheringProfileViewModel){
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)){
             Button(onClick = {
                 viewModel.updateCatheringProfile(
-                    Cathering(inputDeskripsi.value,curData.value!!.id, curData.value!!.imageLogo, curData.value!!.imageMenu, 1,inputNama.value, curData.value!!.tanggalRegister,curData.value!!.userId), dataStore.getUserId,
+                    Cathering(inputDeskripsi.value,curData.value!!.id, curData.value!!.imageLogo, curData.value!!.imageMenu, "1",inputNama.value, curData.value!!.tanggalRegister,curData.value!!.userId), dataStore.getUserId,
                     dataStore.getToken
                 )
 
