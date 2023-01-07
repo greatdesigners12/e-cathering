@@ -3,10 +3,7 @@ package com.training.e_cathering.Components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -28,7 +25,7 @@ fun UserPageBottomNavigation(navController: NavController, bottomBarState : Muta
     )
     AnimatedVisibility(visible = bottomBarState.value, enter = slideInVertically ( initialOffsetY = { it } ),  exit = slideOutVertically(targetOffsetY = { it })) {
         BottomNavigation(
-            backgroundColor = colorResource(id = R.color.teal_200),
+            backgroundColor = MaterialTheme.colors.primary,
             contentColor = Color.Black,
 
             ) {
@@ -39,8 +36,8 @@ fun UserPageBottomNavigation(navController: NavController, bottomBarState : Muta
                     icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
                     label = { Text(text = item.title,
                         fontSize = 9.sp) },
-                    selectedContentColor = Color.Black,
-                    unselectedContentColor = Color.Black.copy(0.4f),
+                    selectedContentColor = Color.White,
+                    unselectedContentColor = Color.White.copy(0.4f),
                     alwaysShowLabel = true,
                     selected = currentRoute == item.screen_route,
                     onClick = {

@@ -132,67 +132,8 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
                     Spacer(modifier = Modifier.width(10.dp))
                 }
             }
-            val context = LocalContext.current
-            Button(onClick = {
-                val sdk = SdkUIFlowBuilder.init()
-                    .setClientKey(client_key) // client_key is mandatory
-                    .setContext(context) // context is mandatory
-                    .setTransactionFinishedCallback {
-                        // Handle finished transaction here.
-                    } // set transaction finish callback (sdk callback)
-                    .setMerchantBaseUrl(midtrans_base_url) //set merchant url (required)
-                    .enableLog(true) // enable sdk log (optional)
-                    .setColorTheme(
-                        CustomColorTheme(
-                            "#FFE51255",
-                            "#B61548",
-                            "#FFE51255"
-                        )
-                    ) // set theme. it will replace theme on snap theme on MAP ( optional)
-                    .buildSDK()
-                val transactionRequest = TransactionRequest("awdawdaw", 20000.0)
-                val customerDetails = CustomerDetails()
-                customerDetails.setCustomerIdentifier("budi-6789")
-                customerDetails.setPhone("08123456789")
-                customerDetails.setFirstName("Budi")
-                customerDetails.setLastName("Utomo")
-                customerDetails.setEmail("budi@utomo.com")
 
-                val shippingAddress = ShippingAddress()
-                shippingAddress.address = "Jalan Andalas Gang Sebelah No. 1"
-                shippingAddress.city = "Jakarta"
-                shippingAddress.postalCode = "10220"
-                customerDetails.setShippingAddress(shippingAddress)
 
-                val billingAddress = BillingAddress()
-                billingAddress.address = "Jalan Andalas Gang Sebelah No. 1"
-                billingAddress.city = "Jakarta"
-                billingAddress.postalCode = "10220"
-                customerDetails.setBillingAddress(billingAddress)
-                val itemDetails1 =
-                    ItemDetails("ITEM_ID_1", 10000.0, 1, "ITEM_NAME_1")
-                val itemDetails2 =
-                    ItemDetails("ITEM_ID_2", 10000.0, 1, "ITEM_NAME_2")
-
-// Create array list and add above item details in it and then set it to transaction request.
-
-// Create array list and add above item details in it and then set it to transaction request.
-                val itemDetailsList: ArrayList<ItemDetails> = ArrayList()
-                itemDetailsList.add(itemDetails1)
-                itemDetailsList.add(itemDetails2)
-
-                transactionRequest.itemDetails = itemDetailsList
-                transactionRequest.setCustomerDetails(customerDetails)
-                val billInfoModel = BillInfoModel("BILL_INFO_KEY", "BILL_INFO_VALUE")
-
-                transactionRequest.billInfoModel = billInfoModel
-                sdk.setTransactionRequest(transactionRequest)
-                sdk.startPaymentUiFlow(context)
-            }) {
-
-                Text("Start payment")
-
-            }
         }
 
 

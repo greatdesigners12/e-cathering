@@ -94,7 +94,7 @@ fun RegisterScreenActivity(viewModel: RegisterViewModel) {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
             Button(onClick = {
                 loadingProgress.value = true
-                val user = User(emailInput.value, passwordInput.value, "user")
+                val user = User(emailInput.value, passwordInput.value)
                 viewModel.register(user)
             }) {
                 if(loadingProgress.value){

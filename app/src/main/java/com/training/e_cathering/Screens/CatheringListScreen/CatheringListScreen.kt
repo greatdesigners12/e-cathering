@@ -1,6 +1,7 @@
 package com.training.e_cathering.Screens.CatheringListScreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,12 +15,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.Cathering
 import com.training.e_cathering.Models.CatheringWithRating
 import com.training.e_cathering.Models.Product
+import com.training.e_cathering.Navigation.NavigationEnum
 import com.training.e_cathering.R
 import kotlinx.coroutines.flow.collect
 import java.text.DecimalFormat
@@ -27,7 +30,7 @@ import kotlin.math.roundToInt
 
 
 @Composable
-fun CatheringListScreen(genre : String,viewModel: CatheringListViewModel) {
+fun CatheringListScreen(navController: NavController ,genre : String,viewModel: CatheringListViewModel) {
     val catheringList = remember{
         mutableStateListOf<CatheringWithRating>()
     }
@@ -48,7 +51,7 @@ fun CatheringListScreen(genre : String,viewModel: CatheringListViewModel) {
         
         items(items=catheringList){cathering ->
             CatheringCardHorizontal(cathering = cathering){
-                
+                navController.navigate(NavigationEnum.CatheringDetailActivity.name + "/" + it.id)
             }
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -56,9 +59,11 @@ fun CatheringListScreen(genre : String,viewModel: CatheringListViewModel) {
 }
 
 @Composable
-fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (Product) -> Unit){
+fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (CatheringWithRating) -> Unit){
     Card(modifier = Modifier
-        .fillMaxWidth()) {
+        .fillMaxWidth().clickable {
+            onClick(cathering)
+        }) {
         Row() {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)

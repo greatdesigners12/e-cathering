@@ -8,8 +8,7 @@ data class User(
     val email: String,
     @SerializedName("password")
     val password: String,
-    @SerializedName("role")
-    val role: String
+
 )
 
 data class DataUser(

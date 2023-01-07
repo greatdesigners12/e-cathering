@@ -11,5 +11,7 @@ data class LoginJwtToken(
     @SerializedName("status")
     val status: String,
     @SerializedName("userId")
-    val userId: Int?
+    val userId: Int?,
+    @SerializedName("role")
+    val role: String
 )
