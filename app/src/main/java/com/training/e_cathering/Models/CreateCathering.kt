@@ -10,9 +10,9 @@ data class CreateCathering(
     @SerializedName("Email")
     val Email: String,
     @SerializedName("Image_logo")
-    val Image_logo: String,
+    var Image_logo: String,
     @SerializedName("Image_menu")
-    val Image_menu: String,
+    var Image_menu: String,
     @SerializedName("Is_verified")
     val Is_verified: String,
     @SerializedName("Nama")

@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
+import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.GridModal
 import com.training.e_cathering.Navigation.NavigationEnum
 import com.training.e_cathering.R
@@ -32,18 +33,18 @@ import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CatheringHomeScreen(navController: NavController) {
+fun CatheringHomeScreen(navController: NavController, viewModel: CatheringHomeViewModel) {
     lateinit var choiceList: List<GridModal>
     choiceList = ArrayList<GridModal>()
 
     choiceList = choiceList + GridModal("List Pesanan", R.drawable.orderlist,
         NavigationEnum.OrderListScreenActivity.name)
     choiceList = choiceList + GridModal("Buat Produk", R.drawable.createproduct,NavigationEnum.CreateProductActivity.name)
-    choiceList = choiceList + GridModal("Manajemen Produk", R.drawable.managefood,"adds")
+    choiceList = choiceList + GridModal("Manajemen Produk", R.drawable.managefood,NavigationEnum.ProductManagementActivity.name)
     choiceList = choiceList + GridModal("Profile", R.drawable.ic_baseline_account_box_24, NavigationEnum.CatheringProfileScreenActivity.name)
     choiceList = choiceList + GridModal("Logout", R.drawable.ic_baseline_logout_24,"logout")
     val mContext = LocalContext.current
-
+    val dataStore = DataStoreInstance(LocalContext.current)
     Column(modifier = Modifier.fillMaxSize()){
         Box(
             Modifier
@@ -52,7 +53,7 @@ fun CatheringHomeScreen(navController: NavController) {
                 .background(color = MaterialTheme.colors.primary)
                 .padding(top = 10.dp)){
             Column(modifier = Modifier.padding(horizontal = 10.dp), verticalArrangement = Arrangement.Center){
-                Text("Welcome, user !", color=Color.White)
+                Text("Welcome, owner!", color=Color.White)
                 Text("Home Cathering", color=Color.White, fontWeight = FontWeight.Bold, fontSize = 30.sp,modifier = Modifier.padding(bottom = 16.dp))
 
 
@@ -76,13 +77,24 @@ fun CatheringHomeScreen(navController: NavController) {
             Card(
 
                 onClick = {
-                    navController.navigate(choiceList[it].navigation)
-                    Toast.makeText(
-                        mContext,
-                        choiceList[it].iconName + " selected..",
+                    if (choiceList[it].iconName=="Logout"){
+                        viewModel.logout(dataStore, navController)
+                        Toast.makeText(
+                            mContext,
+                            choiceList[it].iconName + " selected..",
 
-                        Toast.LENGTH_SHORT
-                    ).show()
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else{
+                        navController.navigate(choiceList[it].navigation)
+                        Toast.makeText(
+                            mContext,
+                            choiceList[it].iconName + " selected..",
+
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
                 },
 
 

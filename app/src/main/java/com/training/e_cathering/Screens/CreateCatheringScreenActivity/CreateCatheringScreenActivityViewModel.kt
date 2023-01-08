@@ -54,13 +54,19 @@ class CreateCatheringScreenActivityViewModel @Inject constructor(private val cat
                     if(task.isSuccessful){
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                createCathering.Image_logo = task.result.toString()
+                createCathering.Image_menu = task.result.toString()
                 _registerStatus.emit(catheringRepository.createCathering(createCathering))
             } catch (e: java.lang.Exception) {
                 Log.d(ContentValues.TAG, "getAllBook: ${e.message}")
             }
 
 
-        }}}}}
+        }
+                    }
+                }
+            }
+        }
     }
     fun md5Hash(str: String): String {
         val md = MessageDigest.getInstance("MD5")

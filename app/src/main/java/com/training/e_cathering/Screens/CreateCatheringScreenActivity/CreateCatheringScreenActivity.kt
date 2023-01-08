@@ -2,6 +2,7 @@ package com.training.e_cathering.Screens.CreateCatheringScreenActivity
 
 import android.app.TimePickerDialog
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -84,20 +85,6 @@ fun CreateCatheringScreenActivity(viewModel: CreateCatheringScreenActivityViewMo
         }, mHour, mMinute, false
     )
 
-    val closeAlertDialog : () -> Unit = {
-        alertDialogMsg.value = ""
-        showAlertDialog.value = false
-    }
-
-    if(showAlertDialog.value){
-        SimpleAlertDialog(title = if(alertDialogMsg.value == "Register berhasil")  "success" else "Error", message = alertDialogMsg.value, onDismissRequest = {
-            closeAlertDialog()
-            loadingProgress.value = false
-        }) {
-            closeAlertDialog()
-            loadingProgress.value = false
-        }
-    }
 
 
 
@@ -243,11 +230,14 @@ fun CreateCatheringScreenActivity(viewModel: CreateCatheringScreenActivityViewMo
                 logoImage.value?.let {it->
                     menuImage.value?.let{it1->
                     viewModel.register(
-                        CreateCathering(closeTime.value, inputDescription.value, emailInput.value, "","", "", inputCatheringName.value,openTime.value, passwordInput.value,"","",0)
+                        CreateCathering(closeTime.value, inputDescription.value, emailInput.value, "","", "",
+                            inputCatheringName.value,openTime.value, passwordInput.value,"","",0)
                         ,it, it1
                     )
                 }}
+                Toast.makeText(mContext, "Cathering Berhasil Di Buat", Toast.LENGTH_SHORT).show()
             }) {
+
                 Text(text = "Daftar", fontSize = 20.sp)
             }}
 }
