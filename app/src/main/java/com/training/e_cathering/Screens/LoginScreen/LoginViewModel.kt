@@ -36,8 +36,16 @@ class LoginViewModel @Inject constructor(private val repository: AuthRepository)
     fun setCredential(credential : LoginJwtToken, dataStoreInstance: DataStoreInstance, navController: NavController){
         viewModelScope.launch(Dispatchers.Main) {
             credential.userId?.let { dataStoreInstance.setUserId(it) }
+            if(credential.role == "cathering"){
+                dataStoreInstance.setRole(credential.role)
+            }
             dataStoreInstance.setTokenId(credential.token)
-            navController.navigate(NavigationEnum.HomeScreenActivity.name)
+            if(credential.role == "cathering"){
+                navController.navigate(NavigationEnum.ProductManagementActivity.name)
+            }else{
+                navController.navigate(NavigationEnum.HomeScreenActivity.name)
+            }
+
         }
     }
     fun setupPusher(){

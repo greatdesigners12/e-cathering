@@ -8,11 +8,14 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.util.Log
+import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -144,12 +147,33 @@ fun CartDetailActivity(navController: NavController, catheringId : String, cartD
     }
 
     var totalPrice = remember{
+
         mutableStateOf(0)
     }
 
     var shippingPrice = remember{
         mutableStateOf(0)
     }
+
+    var productsPortion = remember{
+        mutableStateListOf<Int>()
+    }
+
+    val productTimes = remember{
+        mutableStateListOf<Int>()
+    }
+
+    val setTotalPrice : () -> Unit = {
+        var tp = 0
+        for(data in transactionProducts){
+            tp += (data.price * data.portion) * data.time
+        }
+        totalPrice.value = tp
+    }
+
+
+
+
 
     LaunchedEffect(key1 = true){
         cartDetailViewModel.getAllCartProducts(dataStore.getUserId, catheringId, dataStore.getToken)
@@ -184,10 +208,12 @@ fun CartDetailActivity(navController: NavController, catheringId : String, cartD
         cartDetailViewModel.cartProducts.collect{
             cartProducts.clear()
             for(data in it){
-                totalPrice.value += data.Product.harga
+                transactionProducts.add(TransactionProduct(data.Product.nama, data.Product.harga, 1, 1))
                 cartsId.add(data.id)
                 cartProducts.add(data)
-                transactionProducts.add(TransactionProduct(data.Product.nama, data.Product.harga, 1))
+                totalPrice.value = totalPrice.value + data.Product.harga
+                productTimes.add(1)
+                productsPortion.add(1)
             }
 
         }
@@ -239,9 +265,9 @@ fun CartDetailActivity(navController: NavController, catheringId : String, cartD
 
             }
 
-            items(items=cartProducts){item ->
+            itemsIndexed(items=cartProducts){index, item ->
                 Spacer(modifier = Modifier.height(10.dp))
-                Card(modifier = Modifier.height(100.dp)) {
+                Card(modifier = Modifier.height(180.dp)) {
                     Row(modifier = Modifier.fillMaxSize()){
                         Box(
                             Modifier
@@ -264,33 +290,85 @@ fun CartDetailActivity(navController: NavController, catheringId : String, cartD
                                 .fillMaxWidth(0.7f)
                                 .fillMaxHeight()) {
                             Column(modifier = Modifier.fillMaxSize()) {
-                                Text(text = item.Product.nama)
+                                Text(text = item.Product.nama, fontWeight = FontWeight.Bold, fontSize = 17.sp)
                                 Text(text = "Rp. " + item.Product.harga.toString())
                                 Row(modifier = Modifier.height(30.dp)){
                                     Box(modifier = Modifier
-                                        .fillMaxHeight()
+                                        .fillMaxHeight().clickable {
+                                            productTimes.set(index, 1)
+                                            transactionProducts[index].time = 2
+
+                                            setTotalPrice()
+                                        }
                                         .clip(shape = RoundedCornerShape(size = 12.dp))
-                                        .background(MaterialTheme.colors.primary)
+                                        .background(if(productTimes.get(index) == 1) MaterialTheme.colors.primary else Color.White)
                                         .padding(5.dp)
                                     ) {
-                                        Text("One time", color = Color.White)
+                                        Text("One time", color = if(productTimes.get(index) == 1) Color.White else Color.Black)
                                     }
-                                    if(item.Product.type == "daily"){
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    if(item.Product.type == "recurring"){
                                         Box(modifier = Modifier
-                                            .fillMaxHeight()
-                                            .background(MaterialTheme.colors.primary)) {
-                                            Text("Daily")
+                                            .fillMaxHeight().clickable {
+                                                productTimes.set(index, 2)
+                                                transactionProducts[index].time = 2
+                                                setTotalPrice()
+                                            }
+                                            .background(if(productTimes.get(index) != 1) MaterialTheme.colors.primary else Color.White)
+                                            .padding(5.dp)) {
+                                            Text("recurring", color = if(productTimes.get(index) != 1) Color.White else Color.Black)
+
                                         }
+
                                     }
 
                                 }
+                                Spacer(Modifier.height(5.dp))
+                                if(productTimes.get(index) != 1){
+                                    Text("Select Days")
+                                }
 
+                                if(productTimes.get(index) != 1){
+                                    Row(){
+
+                                        Spacer(modifier = Modifier.height(5.dp))
+                                        Icon(Icons.Rounded.Remove, "min", modifier = Modifier.clickable {
+                                            productTimes.set(index, productTimes.get(index) - 1)
+                                            transactionProducts[index].time = productTimes.get(index)
+                                            setTotalPrice()
+
+                                        })
+                                        Spacer(modifier = Modifier.width(5.dp))
+                                        Text(text = productTimes.get(index).toString())
+                                        Spacer(modifier = Modifier.width(5.dp))
+                                        Icon(Icons.Rounded.Add, "add", modifier = Modifier.clickable {
+                                            productTimes.set(index, productTimes.get(index) + 1)
+                                            transactionProducts[index].time = productTimes.get(index)
+                                            setTotalPrice()
+                                        })
+                                    }
+                                }
+                                Spacer(Modifier.height(5.dp))
+                                Text("Select Portion")
+                                Spacer(Modifier.height(5.dp))
                                 Row(modifier = Modifier.height(20.dp)){
-                                    Icon(Icons.Rounded.Remove, "menu")
+                                    Icon(Icons.Rounded.Remove, "menu", modifier = Modifier.clickable {
+                                        if(productsPortion.get(index) > 1){
+
+                                            productsPortion.set(index, productsPortion.get(index) - 1)
+                                            transactionProducts[index].portion = productsPortion.get(index)
+                                            setTotalPrice()
+                                        }
+
+                                    })
                                     Spacer(modifier = Modifier.width(5.dp))
-                                    Text(text = "1")
+                                    Text(text = productsPortion.get(index).toString())
                                     Spacer(modifier = Modifier.width(5.dp))
-                                    Icon(Icons.Rounded.Add, "menu")
+                                    Icon(Icons.Rounded.Add, "menu", modifier = Modifier.clickable {
+                                        productsPortion.set(index, productsPortion.get(index) + 1)
+                                        transactionProducts[index].portion = productsPortion.get(index)
+                                        setTotalPrice()
+                                    })
                                 }
                             }
 
@@ -320,6 +398,10 @@ fun CartDetailActivity(navController: NavController, catheringId : String, cartD
                         text = { Text(text = "Order Now") },
                         // on below line we are adding click listener.
                         onClick = {
+                            var index = 0
+
+                            transactionProducts.add(TransactionProduct("shipping", shippingPrice.value, 1, 1))
+                            totalPrice.value = totalPrice.value + shippingPrice.value
                             cartDetailViewModel.createTransaction(TransactionRequest(products = transactionProducts, carts_id=cartsId, cathering_id = catheringId.toInt(), user_id = 0, shipping_price = shippingPrice.value, total_price = totalPrice.value, full_address = fullAddress.value!!), dataStore.getUserId, dataStore.getToken)
                         },
                         // on below line adding

@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -16,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -110,18 +112,18 @@ fun TransactionGroupCard(transactionGroup: TransactionGroup, onClick : () -> Uni
                 }
 
                 Spacer(Modifier.height(5.dp))
-                if(transactionGroup.status == "Belum terbayar"){
+                if(transactionGroup.status == "Belum terbayar" || transactionGroup.status == "selesai" || transactionGroup.status == "Dalam pengiriman"){
                     Box(modifier = Modifier
                         .width(120.dp)
                         .padding(10.dp)
-                        .background(Color.Red), contentAlignment = Alignment.Center) {
+                        .background(Color.Red).clip(shape=RoundedCornerShape(10.dp)),  contentAlignment = Alignment.Center) {
                         Text("Belum Terbayar", color = Color.White, textAlign = TextAlign.Center)
                     }
                 }else{
                     Box(modifier = Modifier
                         .width(120.dp)
                         .padding(10.dp)
-                        .background(Color.Green), contentAlignment = Alignment.Center) {
+                        .background(Color.Green).clip(shape=RoundedCornerShape(10.dp)), contentAlignment = Alignment.Center) {
                         Text("Terbayar", color = Color.White)
                     }
                 }

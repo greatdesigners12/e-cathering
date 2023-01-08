@@ -18,6 +18,7 @@ class SettingViewModel @Inject constructor(val cartRepository: CartRepository, v
         viewModelScope.launch(Dispatchers.Main) {
             dataStoreInstance.deleteToken()
             dataStoreInstance.deleteUserId()
+            dataStoreInstance.deleteRole()
             navController.navigate(NavigationEnum.LoginScreenActivity.name){
                 popUpTo(NavigationEnum.LoginScreenActivity.name)
             }

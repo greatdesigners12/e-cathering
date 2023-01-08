@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.e_cathering.Models.Category
 import com.training.e_cathering.Models.Cathering
+import com.training.e_cathering.Models.CatheringWithRating
 import com.training.e_cathering.Models.Response
 import com.training.e_cathering.Repositories.CategoryRepository
 import com.training.e_cathering.Repositories.CatheringRepository
@@ -25,7 +26,8 @@ class HomeViewModel @Inject constructor(private val catheringRepository: Catheri
     val catheringList = _catheringList.asSharedFlow()
     private val _categoryList = MutableSharedFlow<List<Category>>()
     val categoryList = _categoryList.asSharedFlow()
-
+    private val _popularCathering = MutableSharedFlow<List<CatheringWithRating>>()
+    val popularCathering = _popularCathering.asSharedFlow()
     fun searchAll(search : String, token : Flow<String?>){
         viewModelScope.launch(Dispatchers.IO){
             token.collect{
@@ -43,6 +45,22 @@ class HomeViewModel @Inject constructor(private val catheringRepository: Catheri
         viewModelScope.launch(Dispatchers.IO) {
             try{
                 catheringRepository.getAllCatherings().data?.data?.let { _catheringList.emit(it) }
+            }catch (e : java.lang.Exception){
+                Log.d(ContentValues.TAG, "getAllBook: ${e.message}")
+            }
+
+
+        }
+    }
+
+    fun getAllCatheringsByRating(limit : Int, token: Flow<String?>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try{
+                token.collect{
+                    if(it != null){
+                        catheringRepository.getAllCatheringByPopularity(limit, it).data?.data?.let { _popularCathering.emit(it) }
+                    }
+                }
             }catch (e : java.lang.Exception){
                 Log.d(ContentValues.TAG, "getAllBook: ${e.message}")
             }

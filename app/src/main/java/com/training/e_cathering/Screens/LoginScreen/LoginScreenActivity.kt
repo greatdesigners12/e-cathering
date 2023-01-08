@@ -54,10 +54,21 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
     val dataStore = DataStoreInstance(LocalContext.current)
 
     LaunchedEffect(key1 = true){
+
         dataStore.getToken.collect{
             Log.d(TAG, "LoginScreenActivity: ${it}")
             if(it != "" && it != null){
-                navController.navigate(NavigationEnum.HomeScreenActivity.name)
+                dataStore.getRole.collect{
+                    if(it != null){
+                        if(it == "cathering"){
+                            navController.navigate(NavigationEnum.ProductManagementActivity.name)
+                        }else{
+                            navController.navigate(NavigationEnum.HomeScreenActivity.name)
+
+                        }
+                    }
+                }
+
             }
         }
 
@@ -71,7 +82,7 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
             if(it.data != null){
                 if(it.data!!.message == "login berhasil"){
                     if(it.data!!.role == "cathering"){
-                        Log.d(TAG, "LoginScreenActivity: this is cathering account")
+                        viewModel.setCredential(it.data!!, dataStore, navController)
                     }else if(it.data!!.role == "admin"){
                         
                     }else{

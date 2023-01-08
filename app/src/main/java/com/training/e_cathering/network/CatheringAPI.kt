@@ -1,7 +1,14 @@
 package com.training.e_cathering.network
 
 import com.training.e_cathering.Models.*
+
 import retrofit2.http.*
+
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
+import retrofit2.http.Query
+
 import javax.inject.Singleton
 
 @Singleton
@@ -29,4 +36,8 @@ interface CatheringAPI {
 
     @POST("/createCathering")
     suspend fun createCathering(@Body createCathering: CreateCathering) : SingleResponseData<CreateCathering>
+
+    @GET("getAllCatheringByPopularity")
+    suspend fun getAllCatheringByPopularity(@Query("limit") limit : Int, @Header("token") token : String) : Response<CatheringWithRating>
+
 }

@@ -16,12 +16,17 @@ class DataStoreInstance(private val context: Context) {
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("userId")
         val USER_ID_KEY = stringPreferencesKey("user_id")
         val TOKEN_ID_KEY = stringPreferencesKey("token_id")
+        val USER_ROLE = stringPreferencesKey("role")
     }
 
     //get the saved email
     val getUserId: Flow<String?> = context.dataStore.data
         .map { preferences ->
             preferences[USER_ID_KEY] ?: ""
+        }
+    val getRole: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[USER_ROLE] ?: ""
         }
 
     val getToken: Flow<String?> = context.dataStore.data
@@ -37,6 +42,13 @@ class DataStoreInstance(private val context: Context) {
         }
     }
 
+    suspend fun setRole(role: String) {
+        context.dataStore.edit { preferences ->
+            preferences[USER_ROLE] = role
+
+        }
+    }
+
     suspend fun setTokenId(token: String) {
         context.dataStore.edit { preferences ->
             preferences[TOKEN_ID_KEY] = token
@@ -46,6 +58,12 @@ class DataStoreInstance(private val context: Context) {
     suspend fun deleteToken() {
         context.dataStore.edit { preferences ->
             preferences[TOKEN_ID_KEY] = ""
+        }
+    }
+
+    suspend fun deleteRole() {
+        context.dataStore.edit { preferences ->
+            preferences[USER_ROLE] = ""
         }
     }
 

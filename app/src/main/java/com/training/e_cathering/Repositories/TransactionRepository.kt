@@ -5,7 +5,6 @@ import android.util.Log
 import com.training.e_cathering.Models.*
 import com.training.e_cathering.Utils.DataAPIWrapper
 import com.training.e_cathering.network.TransactionAPI
-import retrofit2.http.*
 import javax.inject.Inject
 
 class TransactionRepository @Inject constructor(val transactionAPI : TransactionAPI)  {
@@ -53,12 +52,13 @@ class TransactionRepository @Inject constructor(val transactionAPI : Transaction
         }
         return data
     }
+
     suspend fun getAllPaidGroups(user_id : Int, token : String) : DataAPIWrapper<Response<TransactionGroup>, Boolean, Exception> {
         val data = DataAPIWrapper<Response<TransactionGroup>, Boolean, Exception>()
         data.loading = true
         try{
 
-            data.data = transactionAPI.getAllPaidGroup(user_id.toInt(), token)
+            data.data = transactionAPI.getAllPaidGroup(user_id, token)
             Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
             data.loading = false
         }catch(e : Exception){
@@ -82,11 +82,52 @@ class TransactionRepository @Inject constructor(val transactionAPI : Transaction
         return data
     }
     suspend fun updatePaidGroups(transactionGroup: TransactionGroup, id:String, token:String): DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception> {
+
+
+
+
         val data = DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception>()
         data.loading = true
         try{
 
+
             data.data = transactionAPI.updatePaidGroups(transactionGroup,id.toInt(), token)
+
+
+            Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(ContentValues.TAG, "getAllCatherings: ${e.message}")
+        }
+        return data
+    }
+    suspend fun setToSuccess(id_transaction : Int, token : String) : DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception> {
+        val data = DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+
+            data.data = transactionAPI.setToSuccess(id_transaction, token)
+
+            Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(ContentValues.TAG, "getAllCatherings: ${e.message}")
+        }
+        return data
+    }
+
+
+
+
+    suspend fun resetIdTransaction(id_transaction : String,token : String) : DataAPIWrapper<SingleResponseData<String>, Boolean, Exception>{
+        val data = DataAPIWrapper<SingleResponseData<String>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = transactionAPI.resetIdTransaction(id_transaction, token)
             Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
             data.loading = false
         }catch(e : Exception){

@@ -43,13 +43,14 @@ class CatheringDetailViewModel @Inject constructor(val catheringRepository: Cath
         }
     }
 
-    fun getAllProductsWithCartChecker(user_id: Flow<String?>, cathering_id : String, token : Flow<String?>){
+    fun getAllProductsWithCartChecker(user_id: Flow<String?>, price_order : String, product_type : String, cathering_id : String, token : Flow<String?>){
+
         viewModelScope.launch(Dispatchers.IO) {
             token.collect{token ->
                 if(token != null){
                     user_id.collect{
                         if(it != null){
-                            catheringRepository.getProductsWithCartChecker(cathering_id.toInt(), it.toInt(), token!!).data?.let { it1 ->
+                            catheringRepository.getProductsWithCartChecker(cathering_id.toInt(), price_order, product_type ,it.toInt(), token!!).data?.let { it1 ->
                                 _productData.emit(
                                     it1
                                 )

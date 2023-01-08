@@ -2,12 +2,13 @@ package com.training.e_cathering.Models
 
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class Product(
     @SerializedName("id")
     val id: String?,
     @SerializedName("cathering_id")
-    val catheringId: String,
+    val catheringId: String?,
     @SerializedName("deskripsi")
     val deskripsi: String,
     @SerializedName("harga")
@@ -17,5 +18,9 @@ data class Product(
     @SerializedName("image_url")
     var image: String,
     @SerializedName("nama")
-    val nama: String
+    val nama: String,
+    @SerializedName("start_date")
+    var start_date: String,
+    @SerializedName("due_date")
+    var due_date: String
 )
