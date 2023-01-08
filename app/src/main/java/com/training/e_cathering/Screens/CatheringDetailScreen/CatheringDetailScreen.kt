@@ -142,10 +142,6 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
         coroutineScope.launch { sheetState.hide() }
     }
 
-
-
-
-
     LaunchedEffect(key1 = viewModel.productData.collectAsState(initial = "").value){
         viewModel.productData.collect{
 
@@ -270,11 +266,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 25.sp
                                 )
-                                Button(onClick = {
 
-                                }) {
-                                    Text("Chat")
-                                }
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(curData.value!!.deskripsi)

@@ -32,7 +32,6 @@ import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailVie
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListScreen
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListViewModel
 import com.training.e_cathering.Screens.CreateCatheringScreen.CreateCatheringScreen
-import com.training.e_cathering.Screens.CreateFrozenFoodScreen.CreateFrozenFoodScreen
 import com.training.e_cathering.Screens.CreateProductScreen.CreateProductScreen
 import com.training.e_cathering.Screens.CreateProductScreen.productViewModel
 import com.training.e_cathering.Screens.HistoryScreenActivity.HistoryScreenActivity
@@ -223,9 +222,6 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     ?.let { it1 -> CatheringDetailScreen(navController, it1, catheringDetailViewModel) }
             }
 
-            composable(NavigationEnum.CreateFrozenFoodActivity.name){
-                CreateFrozenFoodScreen()
-            }
             composable(NavigationEnum.CreateCatheringActivity.name){
                 CreateCatheringScreen()
             }
