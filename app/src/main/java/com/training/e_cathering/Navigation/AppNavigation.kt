@@ -1,6 +1,8 @@
 package com.training.e_cathering.Navigation
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -55,6 +57,7 @@ import com.training.e_cathering.Screens.TransactionDetailScreen.TransactionDetai
 import com.training.e_cathering.Screens.UpdateProductActivity.UpdateProductActivity
 import com.training.e_cathering.Screens.UpdateProductActivity.UpdateProductViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   registerViewModel: RegisterViewModel = viewModel(),
@@ -121,6 +124,10 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             bottomBarState.value = true
             appBarState.value = false
         }
+        NavigationEnum.SplashScreenActivity.name -> {
+            bottomBarState.value = false
+            appBarState.value = false
+        }
 
     }
 
@@ -142,7 +149,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         bottomBar = { UserPageBottomNavigation(navController = navController, bottomBarState) }
     ){
 
-        NavHost(navController=navController, startDestination = NavigationEnum.LoginScreenActivity.name){
+        NavHost(navController=navController, startDestination = NavigationEnum.SplashScreenActivity.name){
 
             composable(NavigationEnum.SplashScreenActivity.name){
                 SplashScreenActivity(navController)

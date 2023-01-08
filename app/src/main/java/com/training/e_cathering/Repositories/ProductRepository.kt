@@ -12,6 +12,7 @@ import com.training.e_cathering.network.ProductAPI
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(private val productAPI: ProductAPI) {
+
     suspend fun createProduct(product : Product, token : String) : DataAPIWrapper<SingleResponseData<Product>, Boolean, Exception>{
         val data = DataAPIWrapper<SingleResponseData<Product>, Boolean, Exception>()
         try {

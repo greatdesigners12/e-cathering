@@ -9,6 +9,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -25,8 +26,8 @@ fun SimpleAlertDialog(title : String, message : String, onDismissRequest : () ->
 }
 
 @Composable
-fun CustomAlertDialog(title : String, onDismiss : () -> Unit, components : @Composable () -> Unit) {
-    AlertDialog(title={Text(title)}, modifier = Modifier.fillMaxWidth().height(200.dp) , text = {components()}, buttons = {
+fun CustomAlertDialog(title : String, onDismiss : () -> Unit, height : Dp = 200.dp, components : @Composable () -> Unit) {
+    AlertDialog(title={Text(title)}, modifier = Modifier.fillMaxWidth().height(height) , text = {components()}, buttons = {
 
 
     }, onDismissRequest = onDismiss)

@@ -114,9 +114,14 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
     val foodAvailability = remember{
         mutableStateOf("")
     }
+
+    val search = remember{
+        mutableStateOf("")
+    }
+
     LaunchedEffect(key1 = true){
         viewModel.getCatheringById(id, dataStore.getToken)
-        viewModel.getAllProductsWithCartChecker(dataStore.getUserId, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
+        viewModel.getAllProductsWithCartChecker(dataStore.getUserId, search = search.value,orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
     }
 
     LaunchedEffect(key1 = viewModel.catheringData.collectAsState(initial = "").value){
@@ -137,9 +142,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
         coroutineScope.launch { sheetState.hide() }
     }
 
-    val search = remember{
-        mutableStateOf("")
-    }
+
 
 
 
@@ -161,7 +164,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
         viewModel.addCartStatus.collect{
             if(it != null){
                 if(it.status == "success"){
-                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
+                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, search = search.value,orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
                 }
             }
 
@@ -174,7 +177,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
         viewModel.removeCartStatus.collect{
             if(it != null){
                 if(it.status == "success"){
-                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
+                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, search.value, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
                 }
             }
         }
@@ -194,7 +197,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
                         orderPrice.value = "l"
                     }
 
-                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
+                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, search.value, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
                 }){
                     if(it.equals("daily")){
                         foodAvailability.value = "d"
@@ -203,7 +206,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
                     }else{
                         foodAvailability.value = ""
                     }
-                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
+                    viewModel.getAllProductsWithCartChecker(dataStore.getUserId, search.value,orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
                 } },
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -233,6 +236,7 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
                             .padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically){
                             basicInputField("Search Food", inputWidth = 0.9f, search.value) {
                                 search.value = it
+                                viewModel.getAllProductsWithCartChecker(dataStore.getUserId, search.value,orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
                             }
                             Spacer(modifier = Modifier.width(10.dp))
                             Icon(

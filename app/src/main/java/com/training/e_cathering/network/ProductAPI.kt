@@ -19,7 +19,7 @@ interface ProductAPI {
     suspend fun getProductById(@Path("product_id") productId : String, @Header("token") token : String) : SingleResponseData<Product>
 
     @GET("getAllProductsWithCartChecker")
-    suspend fun getProductWithCartChecker(@Query("user_id") user_id : Int, @Query("price_order") price_order : String, @Query("product_type") product_type : String, @Query("cathering_id") cathering_id : Int, @Header("token") token: String) : ProductsWithCartChecker
+    suspend fun getProductWithCartChecker(@Query("user_id") user_id : Int, @Query("search") search : String, @Query("price_order") price_order : String, @Query("product_type") product_type : String, @Query("cathering_id") cathering_id : Int, @Header("token") token: String) : ProductsWithCartChecker
 
     @GET("getAllProductByUserId/{user_id}")
     suspend fun getAllProductByUserId(@Path("user_id") user_id : Int, @Header("token") token: String) : Response<Product>
@@ -29,4 +29,7 @@ interface ProductAPI {
 
     @POST("updateProduct/{product_id}")
     suspend fun updateProductById(@Path("product_id") product_id : Int, @Body product: Product, @Header("token") token: String) : SingleResponseData<Product>
+
+    @GET("searchProduct/{search}")
+    suspend fun updateProductById(@Path("search") search : String, @Query("cathering_id") cathering_id: Int ,@Body product: Product, @Header("token") token: String) : SingleResponseData<Product>
 }

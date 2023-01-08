@@ -53,4 +53,10 @@ class AppModule {
         return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(TransactionAPI::class.java)
     }
 
+    @Singleton
+    @Provides
+    fun provideReviewAPI() : ReviewAPI {
+        return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(ReviewAPI::class.java)
+    }
+
 }

@@ -1,8 +1,5 @@
 package com.training.e_cathering.Screens.TransactionDetailScreen
 
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,16 +16,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.midtrans.sdk.corekit.core.MidtransSDK
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme
 import com.midtrans.sdk.corekit.models.*
 import com.midtrans.sdk.corekit.models.snap.TransactionResult
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder
+import com.training.e_cathering.Components.CustomAlertDialog
+import com.training.e_cathering.Components.textInputField
 import com.training.e_cathering.Constant
 import com.training.e_cathering.DataStoreInstance
+import com.training.e_cathering.Models.Review
 import com.training.e_cathering.Models.TransactionGroup
 
 
@@ -51,8 +51,25 @@ fun TransactionDetailActivity(navController: NavController, id : String ,viewMod
         mutableStateOf("")
     }
 
+    val showReviewModal = remember{
+        mutableStateOf(false)
+    }
+
+    val reviewMsg = remember{
+        mutableStateOf("")
+    }
+
+    val rating = remember{
+        mutableStateOf("")
+    }
+
+    val userReviews = remember{
+        mutableStateListOf<Review>()
+    }
+
     LaunchedEffect(key1 = true){
         viewModel.getTransactionGroupById(id.toInt(), dataStore.getToken)
+        viewModel.getReview(dataStore.getUserId, id, dataStore.getToken)
     }
 
     LaunchedEffect(key1 = viewModel.transactionGroup.collectAsState(initial = "").value){
@@ -68,8 +85,41 @@ fun TransactionDetailActivity(navController: NavController, id : String ,viewMod
         }
     }
 
+    LaunchedEffect(key1 = viewModel.addReviewStatus.collectAsState(initial = "").value){
+        viewModel.addReviewStatus.collect{
+            viewModel.getTransactionGroupById(id.toInt(), dataStore.getToken)
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel.userReview.collectAsState(initial = "").value){
+        viewModel.userReview.collect{
+            userReviews.clear()
+            userReviews.addAll(it)
+        }
+    }
+
+    if(showReviewModal.value){
+        CustomAlertDialog(title="Add Review", height = 350.dp, onDismiss = {
+            showReviewModal.value = false
+        }){
+            Column() {
+                textInputField(label = "Review message", inputValue = reviewMsg.value){
+                    reviewMsg.value = it
+                }
+                textInputField(label = "Rating", inputValue = rating.value, keyboardType = KeyboardType.Decimal ){
+                    rating.value = it
+                }
+                Button(onClick = {
+                    viewModel.createReview(Review(null, null, id.toInt(), reviewMsg.value, rating.value.toFloat()), dataStore.getUserId, dataStore.getToken)
+                    showReviewModal.value = false
+                }) {
+                    Text("Create Review")
+                }
+            }
 
 
+        }
+    }
 
     if(curData.value != null){
         LazyColumn(modifier = Modifier
@@ -154,11 +204,7 @@ fun TransactionDetailActivity(navController: NavController, id : String ,viewMod
                                                     viewModel.getTransactionGroupById(id.toInt(), dataStore.getToken)
                                                 }
                                                 TransactionResult.STATUS_PENDING -> {
-
-
-//                                                    val snap_token = result.response.redirectUrl.replace("https://app.sandbox.midtrans.com/snap/v3/redirection/", "")
-//                                                    snapToken.value = snap_token
-//                                                    viewModel.setSnapToken(curData!!.value!!.idTransaction, snap_token, dataStore.getToken)
+                                                     viewModel.resetIdTransaction(curData!!.value!!.idTransaction, dataStore.getToken)
                                                 }
                                                 TransactionResult.STATUS_FAILED -> Toast.makeText(
                                                     context,
@@ -257,6 +303,15 @@ fun TransactionDetailActivity(navController: NavController, id : String ,viewMod
                             icon = { Icon(Icons.Filled.Add, "") }
                         )
                     }
+                }else if(curData.value!!.status == "Terbayar"){
+                    if(userReviews.size == 0){
+                        Button(onClick = {
+                            showReviewModal.value = true
+                        }){
+                            Text("Make Review")
+                        }
+                    }
+
                 }else{
                     Box(modifier = Modifier
                         .fillMaxSize()
@@ -266,7 +321,7 @@ fun TransactionDetailActivity(navController: NavController, id : String ,viewMod
                             text = { Text(text = "Pesanan akan diantar ke tempatmu") },
                             // on below line we are adding click listener.
                             onClick = {
-                               Toast.makeText(context, "Harap Menunggu", Toast.LENGTH_LONG)
+                                Toast.makeText(context, "Harap Menunggu", Toast.LENGTH_LONG)
                             },
                             // on below line adding
                             // a background color.
