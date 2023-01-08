@@ -4,6 +4,7 @@ package com.training.e_cathering.Screens.HomeScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
@@ -36,6 +37,7 @@ import com.training.e_cathering.Constant.midtrans_base_url
 import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.Category
 import com.training.e_cathering.Models.Cathering
+import com.training.e_cathering.Models.CatheringWithRating
 import com.training.e_cathering.Navigation.NavigationEnum
 import java.util.*
 import kotlin.collections.ArrayList
@@ -57,6 +59,10 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
         mutableStateListOf<Category>()
     }
 
+    val popularCatheringList = remember{
+        mutableStateListOf<CatheringWithRating>()
+    }
+
     val dataStore = DataStoreInstance(LocalContext.current)
     val context = LocalContext.current
 
@@ -65,7 +71,9 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
     LaunchedEffect(key1 = true){
         homeViewModel.getAllCatherings()
         homeViewModel.getAllCategories(dataStore.getToken)
+        homeViewModel.getAllCatheringsByRating(10, dataStore.getToken)
     }
+
     LaunchedEffect(key1 = homeViewModel.catheringList.collectAsState(initial = null).value){
 
             homeViewModel.catheringList.collect{
@@ -96,6 +104,21 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
 
     }
 
+    LaunchedEffect(key1 = homeViewModel.popularCathering.collectAsState(initial = null).value){
+
+        homeViewModel.popularCathering.collect{
+            if(it != null){
+                popularCatheringList.clear()
+                popularCatheringList.addAll(it)
+            }else{
+                popularCatheringList.clear()
+            }
+
+        }
+
+
+    }
+
 
     Column(modifier = Modifier.fillMaxSize()){
         Box(
@@ -114,28 +137,44 @@ fun HomeScreenActivity(homeViewModel : HomeViewModel, navController: NavControll
             }
 
         }
-        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-            Text("Favourite Cathering", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            LazyRow{
-                items(items=allCatheringList){item ->
-                    CatheringCard(item){
-                        navController.navigate(NavigationEnum.CatheringDetailActivity.name + "/" + item.id)
+        LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)) {
+            item{
+                Text("Cathering disekitarmu", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                LazyRow{
+                    items(items=allCatheringList){item ->
+                        CatheringCard(item){
+                            navController.navigate(NavigationEnum.CatheringDetailActivity.name + "/" + item.id)
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
                 }
-            }
-            Text("Category", fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            LazyRow{
-                items(items=allCategoryList){item ->
-                    CategoryCard(item){
-                        navController.navigate(NavigationEnum.CatheringListActivity.name + "/" + it)
+                Text("Category", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                LazyRow{
+                    items(items=allCategoryList){item ->
+                        CategoryCard(item){
+                            navController.navigate(NavigationEnum.CatheringListActivity.name + "/" + it)
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
                 }
+
+                Text("Best Seller", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                LazyRow{
+                    items(items=popularCatheringList){item ->
+                        CatheringWithRatingCard(item){
+                            navController.navigate(NavigationEnum.CatheringDetailActivity.name + "/" + item.id)
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                }
+                Spacer(modifier = Modifier.height(75.dp))
             }
+
 
 
         }
+
+
 
 
     }
@@ -150,6 +189,33 @@ fun CatheringCard(data : Cathering, cardClick : () -> Unit){
         .clickable {
             cardClick()
         }){
+        Column(){
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(data.imageLogo)
+                    .crossfade(true)
+                    .build(),
+                modifier = Modifier.height(100.dp),
+                contentDescription = "Cathering image",
+                contentScale = ContentScale.Crop,
+            )
+            Text(data.nama, textAlign = TextAlign.Center)
+        }
+
+    }
+}
+
+@Composable
+fun CatheringWithRatingCard(data : CatheringWithRating, cardClick : () -> Unit){
+    Card(modifier = Modifier
+        .width(100.dp)
+        .height(150.dp)
+        .clickable {
+            cardClick()
+        }){
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopEnd){
+            Text(data.average_rating.toString(), color = Color.White)
+        }
         Column(){
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)

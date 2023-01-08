@@ -1,13 +1,17 @@
 package com.training.e_cathering.Screens.CatheringListScreen
 
+import android.widget.Space
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -18,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.training.e_cathering.Components.basicInputField
 import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.Cathering
 import com.training.e_cathering.Models.CatheringWithRating
@@ -25,10 +30,12 @@ import com.training.e_cathering.Models.Product
 import com.training.e_cathering.Navigation.NavigationEnum
 import com.training.e_cathering.R
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CatheringListScreen(navController: NavController ,genre : String,viewModel: CatheringListViewModel) {
     val catheringList = remember{
@@ -46,17 +53,31 @@ fun CatheringListScreen(navController: NavController ,genre : String,viewModel: 
             catheringList.addAll(it.data)
         }
     }
-    
-    LazyColumn(modifier = Modifier.padding(10.dp)){
-        
-        items(items=catheringList){cathering ->
-            CatheringCardHorizontal(cathering = cathering){
-                navController.navigate(NavigationEnum.CatheringDetailActivity.name + "/" + it.id)
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-        }
+
+    val search = remember{
+        mutableStateOf("")
     }
+
+
+
+        LazyColumn(modifier = Modifier.padding(10.dp)) {
+            item{
+                basicInputField("Search Cathering", inputValue = search.value){
+                    search.value = it
+                }
+            }
+            items(items = catheringList) { cathering ->
+                Spacer(modifier = Modifier.height(20.dp))
+                CatheringCardHorizontal(cathering = cathering) {
+                    navController.navigate(NavigationEnum.CatheringDetailActivity.name + "/" + it.id)
+                }
+
+            }
+        }
+
 }
+
+
 
 @Composable
 fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (CatheringWithRating) -> Unit){

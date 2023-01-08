@@ -52,4 +52,34 @@ class TransactionRepository @Inject constructor(val transactionAPI : Transaction
         }
         return data
     }
+
+    suspend fun setToSuccess(id_transaction : Int, token : String) : DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception> {
+        val data = DataAPIWrapper<SingleResponseData<TransactionGroup>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = transactionAPI.setToSuccess(id_transaction, token)
+            Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(ContentValues.TAG, "getAllCatherings: ${e.message}")
+        }
+        return data
+    }
+
+    suspend fun resetIdTransaction(id_transaction : String,token : String) : DataAPIWrapper<SingleResponseData<String>, Boolean, Exception>{
+        val data = DataAPIWrapper<SingleResponseData<String>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = transactionAPI.resetIdTransaction(id_transaction, token)
+            Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(ContentValues.TAG, "getAllCatherings: ${e.message}")
+        }
+        return data
+    }
 }

@@ -27,5 +27,7 @@ data class TransactionGroup(
     @SerializedName("User")
     val User: User,
     @SerializedName("status")
-    val status: String
+    val status: String,
+    @SerializedName("snap_token")
+    val snap_token: String = ""
 )

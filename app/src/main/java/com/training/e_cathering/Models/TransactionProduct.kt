@@ -5,10 +5,13 @@ import com.google.gson.annotations.SerializedName
 data class TransactionProduct(
 
     @SerializedName("name")
-    val name: String,
+    var name: String,
     @SerializedName("price")
-    val price: Int,
+    var price: Int,
     @SerializedName("time")
-    val time: Int,
+    var time: Int,
+    @SerializedName("portion")
+    var portion: Int,
+
 
 )

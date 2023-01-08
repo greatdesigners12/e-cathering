@@ -30,8 +30,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 
 
 @Composable
-fun basicInputField(label : String, inputValue : String, keyboardType: KeyboardType = KeyboardType.Text, onValueChanged : (String) -> Unit){
-    OutlinedTextField(value = inputValue, onValueChanged, singleLine = true, label= { Text(label) }, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = keyboardType), colors = TextFieldDefaults.textFieldColors(
+fun basicInputField(label : String, inputWidth : Float = 1f, inputValue : String, keyboardType: KeyboardType = KeyboardType.Text, onValueChanged : (String) -> Unit){
+    OutlinedTextField(value = inputValue, onValueChanged, singleLine = true, label= { Text(label) }, modifier = Modifier.fillMaxWidth(inputWidth), keyboardOptions = KeyboardOptions(keyboardType = keyboardType), colors = TextFieldDefaults.textFieldColors(
         backgroundColor = MaterialTheme.colors.background
     ))
 }

@@ -14,4 +14,13 @@ interface TransactionAPI {
 
     @GET("getAllTransactionGroup/{user_id}")
     suspend fun getAllTransactionGroup(@Path("user_id") user_id : Int, @Header("token") token : String) : Response<TransactionGroup>
+
+    @GET("setTransaction/success/{id_transaction}")
+    suspend fun setToSuccess(@Path("id_transaction") id_transaction : Int, @Header("token") token : String) : SingleResponseData<TransactionGroup>
+
+    @GET("setSnapToken/{id_transaction}")
+    suspend fun setSnapToken(@Path("id_transaction") id_transaction : Int, @Query("snap_token") snap_token : String, @Header("token") token : String) : SingleResponseData<TransactionGroup>
+
+    @GET("resetIdTransaction/{id_transaction}")
+    suspend fun resetIdTransaction(@Path("id_transaction") id_transaction : String, @Header("token") token : String) : SingleResponseData<String>
 }

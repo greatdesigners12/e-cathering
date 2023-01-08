@@ -56,6 +56,20 @@ class CatheringRepository @Inject constructor(private val catheringAPI: Catherin
 
     }
 
+    suspend fun getAllCatheringByPopularity(limit : Int, token : String) : DataAPIWrapper<Response<CatheringWithRating>, Boolean, Exception>{
+        val data = DataAPIWrapper<Response<CatheringWithRating>, Boolean, Exception>()
+        data.loading = true
+        try{
+            data.data = catheringAPI.getAllCatheringByPopularity(limit, token)
+            Log.d(TAG, "getAllCatheringsssss: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(TAG, "getAllCatheringsssss: ${e.message}")
+        }
+        return data
+    }
+
     suspend fun getCatheringById(id : String, token : String) : DataAPIWrapper<Response<Cathering>, Boolean, Exception>{
         val data = DataAPIWrapper<Response<Cathering>, Boolean, Exception>()
         data.loading = true
@@ -89,10 +103,11 @@ class CatheringRepository @Inject constructor(private val catheringAPI: Catherin
         return data
     }
 
-    suspend fun getProductsWithCartChecker(cathering_id : Int, user_id : Int, token: String) : DataAPIWrapper<ProductsWithCartChecker, Boolean, Exception>{
+    suspend fun getProductsWithCartChecker(cathering_id : Int, order_price : String, product_type : String, user_id : Int, token: String) : DataAPIWrapper<ProductsWithCartChecker, Boolean, Exception>{
         val data = DataAPIWrapper<ProductsWithCartChecker, Boolean, Exception>()
         try {
-            data.data = productAPI.getProductWithCartChecker(user_id, cathering_id, token)
+            Log.d(TAG, "getProductsWithCartChecker: ${order_price}")
+            data.data = productAPI.getProductWithCartChecker(user_id, order_price, product_type, cathering_id, token)
             data.loading = false
             Log.d(TAG, "createProduct: success")
         }catch (e : Exception){

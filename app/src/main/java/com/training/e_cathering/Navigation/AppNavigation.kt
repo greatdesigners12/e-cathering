@@ -1,5 +1,6 @@
 package com.training.e_cathering.Navigation
 
+import android.content.Context
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -40,6 +41,8 @@ import com.training.e_cathering.Screens.LoginScreen.LoginScreenActivity
 import com.training.e_cathering.Screens.LoginScreen.LoginViewModel
 import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailScreen
 import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailViewModel
+import com.training.e_cathering.Screens.ProductManagementScreen.ProductManagementScreen
+import com.training.e_cathering.Screens.ProductManagementScreen.ProductManagementViewModel
 import com.training.e_cathering.Screens.RegisterScreen.RegisterViewModel
 import com.training.e_cathering.Screens.RegisterScreen.RegisterScreenActivity
 import com.training.e_cathering.Screens.ResetPasswordScreen.ResetPasswordActivity
@@ -49,6 +52,8 @@ import com.training.e_cathering.Screens.SettingScreenActivity.SettingViewModel
 import com.training.e_cathering.Screens.SplashScreenActivity
 import com.training.e_cathering.Screens.TransactionDetailScreen.TransactionDetailActivity
 import com.training.e_cathering.Screens.TransactionDetailScreen.TransactionDetailViewModel
+import com.training.e_cathering.Screens.UpdateProductActivity.UpdateProductActivity
+import com.training.e_cathering.Screens.UpdateProductActivity.UpdateProductViewModel
 
 @Composable
 fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
@@ -62,7 +67,9 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   transactionViewModel: HistoryTransactionViewModel = viewModel(),
                     transactionDetailViewModel: TransactionDetailViewModel = viewModel(),
                     settingViewModel: SettingViewModel = viewModel(),
-                  resetPasswordViewModel: ResetPasswordViewModel = viewModel()) {
+                  resetPasswordViewModel: ResetPasswordViewModel = viewModel(),
+                    productManagementViewModel: ProductManagementViewModel = viewModel(),
+                    updateProductViewModel: UpdateProductViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -133,7 +140,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
 
             },
         bottomBar = { UserPageBottomNavigation(navController = navController, bottomBarState) }
-    ) {
+    ){
 
         NavHost(navController=navController, startDestination = NavigationEnum.LoginScreenActivity.name){
 
@@ -155,11 +162,17 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     ?.let { it1 -> CatheringListScreen(navController ,it1, catheringListViewModel) }
             }
 
+            composable(NavigationEnum.CreateProductActivity.name + "/{product_id}", arguments = listOf(
+                navArgument("product_id"){type = NavType.StringType})){
+                it.arguments?.getString("product_id")
+                    ?.let { it1 -> CreateProductScreen(navController ,it1, productViewModel) }
+            }
+
             composable(NavigationEnum.RegisterScreenActivity.name){
                 RegisterScreenActivity(registerViewModel)
             }
             composable(NavigationEnum.CreateProductActivity.name){
-                CreateProductScreen(productViewModel)
+                CreateProductScreen(navController, null, productViewModel)
             }
 
             composable(NavigationEnum.ProductDetailActivity.name + "/{productId}", arguments = listOf(
@@ -181,7 +194,21 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                         )
                     }
             }
-
+            composable(NavigationEnum.CatheringDetailActivity.name + "/{catheringId}", arguments = listOf(
+                navArgument("catheringId"){type = NavType.StringType}
+            )){
+                it.arguments?.getString("catheringId")
+                    ?.let { it1 -> CatheringDetailScreen(navController, it1, catheringDetailViewModel) }
+            }
+            composable(NavigationEnum.UpdateProductActivity.name + "/{product_id}", arguments = listOf(
+                navArgument("product_id"){type = NavType.StringType}
+            )){
+                it.arguments?.getString("product_id")
+                    ?.let { it1 -> CreateProductScreen(navController, it1, productViewModel) }
+            }
+            composable(NavigationEnum.ProductManagementActivity.name){
+                ProductManagementScreen(navController, productManagementViewModel)
+            }
             composable(NavigationEnum.CatheringDetailActivity.name + "/{catheringId}", arguments = listOf(
                 navArgument("catheringId"){type = NavType.StringType}
             )){

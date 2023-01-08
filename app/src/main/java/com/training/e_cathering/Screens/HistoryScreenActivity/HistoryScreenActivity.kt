@@ -112,7 +112,7 @@ fun TransactionGroupCard(transactionGroup: TransactionGroup, onClick : () -> Uni
                 }
 
                 Spacer(Modifier.height(5.dp))
-                if(transactionGroup.status == "Belum terbayar"){
+                if(transactionGroup.status == "Belum terbayar" || transactionGroup.status == "selesai" || transactionGroup.status == "Dalam pengiriman"){
                     Box(modifier = Modifier
                         .width(120.dp)
                         .padding(10.dp)
