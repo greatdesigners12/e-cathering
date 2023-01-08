@@ -13,11 +13,16 @@ enum class NavigationEnum {
     ResetPasswordActivity,
     CatheringListActivity,
     CreateProductActivity,
-    CreateFrozenFoodActivity,
-    CreateCatheringActivity,
     RegisterScreenActivity,
     HistoryScreenActivity,
     SettingScreenActivity,
+    CatheringProfileScreenActivity,
+    CatheringApprovalScreenActivity,
+    OrderListScreenActivity,
+    OrderDetailScreenActivity,
+    CreateCatheringScreenActivity,
+    CatheringHomeScreenActivity,
+    AdminHomeScreenActivity,
 
 
 }

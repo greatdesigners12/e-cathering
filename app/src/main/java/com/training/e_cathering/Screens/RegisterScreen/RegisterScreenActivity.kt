@@ -1,8 +1,10 @@
 package com.training.e_cathering.Screens.RegisterScreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,17 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 
-import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.training.e_cathering.Components.SimpleAlertDialog
 import com.training.e_cathering.Components.basicInputField
 import com.training.e_cathering.Components.passwordInputField
 import com.training.e_cathering.Models.User
+import com.training.e_cathering.Navigation.NavigationEnum
 
 @Composable
-fun RegisterScreenActivity(viewModel: RegisterViewModel) {
+fun RegisterScreenActivity(navController : NavController, viewModel: RegisterViewModel) {
     val emailInput = remember{
         mutableStateOf("")
     }
@@ -105,6 +107,31 @@ fun RegisterScreenActivity(viewModel: RegisterViewModel) {
             }
         }
 
+        Spacer(Modifier.height(30.dp))
+
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+            Column(){
+                Row(){
+                    Text("Sudah punya akun ? ")
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text("Login sekarang", color = MaterialTheme.colors.primary, modifier = Modifier.clickable {
+                        navController.navigate(NavigationEnum.LoginScreenActivity.name)
+                    })
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(){
+                    Text("Ingin daftar sebagai cathering ? ")
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text("klik sekarang", color = MaterialTheme.colors.primary, modifier = Modifier.clickable {
+                        navController.navigate(NavigationEnum.CreateCatheringScreenActivity.name)
+                    })
+                }
+            }
+
+        }
+
     }
+
+
 }
 

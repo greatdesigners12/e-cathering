@@ -1,5 +1,6 @@
 package com.training.e_cathering.Repositories
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.training.e_cathering.Models.*
@@ -39,6 +40,52 @@ class CatheringRepository @Inject constructor(private val catheringAPI: Catherin
         }
         return data
     }
+    suspend fun  updateCatheringProfile(cathering: Cathering, id: String, token: String): DataAPIWrapper<SingleResponseData<Cathering>, Boolean, Exception>{
+        val data = DataAPIWrapper<SingleResponseData<Cathering>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = catheringAPI.updateCatheringProfile(cathering,id, token)
+            Log.d(TAG, "updateCatheringProfile: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(TAG, "updateCatheringProfile: ${e.message}")
+        }
+
+        return data
+    }
+    suspend fun  updateVerifiedCathering(cathering: Cathering, id: String, token: String): DataAPIWrapper<SingleResponseData<Cathering>, Boolean, Exception>{
+        val data = DataAPIWrapper<SingleResponseData<Cathering>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = catheringAPI.updateCatheringProfile(cathering,id, token)
+            Log.d(TAG, "updateCatheringVerified: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(TAG, "updateCatheringVerified: ${e.message}")
+        }
+
+        return data
+    }
+    suspend fun createCathering(createCathering: CreateCathering) : DataAPIWrapper<SingleResponseData<CreateCathering>, Boolean, Exception> {
+        val data = DataAPIWrapper<SingleResponseData<CreateCathering>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = catheringAPI.createCathering(createCathering)
+            Log.d(ContentValues.TAG, "createCathering: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(ContentValues.TAG, "createCathering: ${e.message}")
+        }
+        return data
+
+    }
+
 
     suspend fun getAllCatheringsByGenre(genre : String, token: String) : DataAPIWrapper<Response<CatheringWithRating>, Boolean, Exception>{
         val data = DataAPIWrapper<Response<CatheringWithRating>, Boolean, Exception>()
@@ -81,6 +128,22 @@ class CatheringRepository @Inject constructor(private val catheringAPI: Catherin
         }catch(e : Exception){
             data.e = e
             Log.d(TAG, "getAllCatherings: ${e.message}")
+        }
+
+        return data
+
+    }
+    suspend fun getCProfileById(id : String, token : String) : DataAPIWrapper<SingleResponseData<Cathering>, Boolean, Exception>{
+        val data = DataAPIWrapper<SingleResponseData<Cathering>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = catheringAPI.getCatheringProfile(id, token)
+            Log.d(TAG, "getProfileCathering: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(TAG, "getProfileCathering: ${e.message}")
         }
 
         return data

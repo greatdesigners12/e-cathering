@@ -54,18 +54,16 @@ fun CatheringListScreen(navController: NavController ,genre : String,viewModel: 
         }
     }
 
+
     val search = remember{
         mutableStateOf("")
+
     }
 
 
 
         LazyColumn(modifier = Modifier.padding(10.dp)) {
-            item{
-                basicInputField("Search Cathering", inputValue = search.value){
-                    search.value = it
-                }
-            }
+
             items(items = catheringList) { cathering ->
                 Spacer(modifier = Modifier.height(20.dp))
                 CatheringCardHorizontal(cathering = cathering) {
@@ -107,9 +105,12 @@ fun CatheringCardHorizontal(cathering: CatheringWithRating, onClick : (Cathering
                     Spacer(modifier = Modifier.width(5.dp))
 
                     Text(DecimalFormat("#.##").format(cathering.average_rating).toString())
+
+
                 }
                 Spacer(Modifier.height(5.dp))
                 Text(cathering.deskripsi, fontSize = 10.sp)
+
 
             }
         }

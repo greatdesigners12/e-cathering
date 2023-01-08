@@ -42,6 +42,8 @@ class LoginViewModel @Inject constructor(private val repository: AuthRepository)
             dataStoreInstance.setTokenId(credential.token)
             if(credential.role == "cathering"){
                 navController.navigate(NavigationEnum.ProductManagementActivity.name)
+            }else if(credential.role == "admin"){
+                navController.navigate(NavigationEnum.AdminHomeScreenActivity.name)
             }else{
                 navController.navigate(NavigationEnum.HomeScreenActivity.name)
             }

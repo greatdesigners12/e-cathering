@@ -15,7 +15,7 @@ data class Cathering (
     @SerializedName("image_menu")
     val imageMenu: String,
     @SerializedName("is_verified")
-    val isVerified: Int,
+    val isVerified: String,
     @SerializedName("nama")
     val nama: String,
     @SerializedName("tanggal_register")
@@ -34,7 +34,7 @@ data class CatheringWithRating(
     @SerializedName("image_menu")
     val imageMenu: String,
     @SerializedName("is_verified")
-    val isVerified: Int,
+    val isVerified: String,
     @SerializedName("nama")
     val nama: String,
     @SerializedName("tanggal_register")

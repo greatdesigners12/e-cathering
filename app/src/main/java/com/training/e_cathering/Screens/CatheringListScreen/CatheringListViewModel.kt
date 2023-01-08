@@ -19,6 +19,8 @@ import javax.inject.Inject
 class CatheringListViewModel @Inject constructor(val catheringRepository: CatheringRepository) : ViewModel() {
     private val _catheringList = MutableSharedFlow<Response<CatheringWithRating>>()
     val catheringList = _catheringList.asSharedFlow()
+    private val _catheringData = MutableSharedFlow<Cathering>()
+    val catheringData = _catheringData.asSharedFlow()
 
     fun getCatheringBasedOnGenre(genre : String, token : Flow<String?>){
         viewModelScope.launch(Dispatchers.IO){
@@ -34,4 +36,8 @@ class CatheringListViewModel @Inject constructor(val catheringRepository: Cather
 
         }
     }
+
+
+
+
 }

@@ -25,13 +25,24 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.training.e_cathering.Components.UserPageBottomNavigation
+import com.training.e_cathering.Screens.AdminHomeScreen.AdminHomeScreen
+import com.training.e_cathering.Screens.AdminHomeScreen.AdminHomeViewModel
 import com.training.e_cathering.Screens.CartDetailActivity.CartDetailActivity
 import com.training.e_cathering.Screens.CartDetailActivity.CartDetailViewModel
+import com.training.e_cathering.Screens.CatheringApprovalScreen.CatheringApprovalScreen
+import com.training.e_cathering.Screens.CatheringApprovalScreen.CatheringApprovalViewModel
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailScreen
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailViewModel
+import com.training.e_cathering.Screens.CatheringHomeScreen.CatheringHomeScreen
+import com.training.e_cathering.Screens.CatheringHomeScreen.CatheringHomeViewModel
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListScreen
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListViewModel
-import com.training.e_cathering.Screens.CreateCatheringScreen.CreateCatheringScreen
+
+import com.training.e_cathering.Screens.CatheringProfileScreen.CatheringProfileScreen
+import com.training.e_cathering.Screens.CatheringProfileScreen.CatheringProfileViewModel
+import com.training.e_cathering.Screens.CreateCatheringScreenActivity.CreateCatheringScreenActivity
+import com.training.e_cathering.Screens.CreateCatheringScreenActivity.CreateCatheringScreenActivityViewModel
+
 import com.training.e_cathering.Screens.CreateProductScreen.CreateProductScreen
 import com.training.e_cathering.Screens.CreateProductScreen.productViewModel
 import com.training.e_cathering.Screens.HistoryScreenActivity.HistoryScreenActivity
@@ -40,6 +51,10 @@ import com.training.e_cathering.Screens.HomeScreen.HomeScreenActivity
 import com.training.e_cathering.Screens.HomeScreen.HomeViewModel
 import com.training.e_cathering.Screens.LoginScreen.LoginScreenActivity
 import com.training.e_cathering.Screens.LoginScreen.LoginViewModel
+import com.training.e_cathering.Screens.OrderDetailScreen.OrderDetailScreen
+import com.training.e_cathering.Screens.OrderDetailScreen.OrderDetailViewModel
+import com.training.e_cathering.Screens.OrderListScreen.OrderListScreen
+import com.training.e_cathering.Screens.OrderListScreen.OrderListViewModel
 import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailScreen
 import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailViewModel
 import com.training.e_cathering.Screens.ProductManagementScreen.ProductManagementScreen
@@ -65,13 +80,21 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                   productDetailViewModel : ProductDetailViewModel= viewModel(),
                   catheringListViewModel: CatheringListViewModel = viewModel(),
                   catheringDetailViewModel: CatheringDetailViewModel = viewModel(),
-                    cartDetailViewModel: CartDetailViewModel = viewModel(),
+                  catheringProfileViewModel: CatheringProfileViewModel = viewModel(),
+                  catheringApprovalViewModel: CatheringApprovalViewModel = viewModel(),
+                  cartDetailViewModel: CartDetailViewModel = viewModel(),
                   transactionViewModel: HistoryTransactionViewModel = viewModel(),
                     transactionDetailViewModel: TransactionDetailViewModel = viewModel(),
                     settingViewModel: SettingViewModel = viewModel(),
+                  orderDetailViewModel: OrderDetailViewModel = viewModel(),
+                  orderListViewModel: OrderListViewModel = viewModel(),
+                  createCatheringScreenActivityViewModel: CreateCatheringScreenActivityViewModel = viewModel(),
                   resetPasswordViewModel: ResetPasswordViewModel = viewModel(),
                     productManagementViewModel: ProductManagementViewModel = viewModel(),
+                  catheringHomeViewModel: CatheringHomeViewModel = viewModel(),
+                  adminHomeViewModel: AdminHomeViewModel = viewModel(),
                     updateProductViewModel: UpdateProductViewModel = viewModel()) {
+
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -113,6 +136,34 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             bottomBarState.value = false
             appBarState.value = true
         }
+        NavigationEnum.OrderListScreenActivity.name->{
+            bottomBarState.value = false
+            appBarState.value = true
+        }
+        NavigationEnum.OrderDetailScreenActivity.name+"/{groupId}"->{
+            bottomBarState.value = false
+            appBarState.value = true
+        }
+        NavigationEnum.CatheringProfileScreenActivity.name->{
+            bottomBarState.value = false
+            appBarState.value = true
+        }
+        NavigationEnum.CatheringApprovalScreenActivity.name->{
+            bottomBarState.value = false
+            appBarState.value = true
+        }
+        NavigationEnum.CreateCatheringScreenActivity.name->{
+            bottomBarState.value = false
+            appBarState.value = false
+        }
+        NavigationEnum.CatheringHomeScreenActivity.name->{
+            bottomBarState.value = false
+            appBarState.value = false
+        }
+        NavigationEnum.AdminHomeScreenActivity.name->{
+            bottomBarState.value = false
+            appBarState.value = false
+        }
 
         NavigationEnum.ResetPasswordActivity.name -> {
             bottomBarState.value = false
@@ -148,7 +199,9 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         bottomBar = { UserPageBottomNavigation(navController = navController, bottomBarState) }
     ){
 
+
         NavHost(navController=navController, startDestination = NavigationEnum.SplashScreenActivity.name){
+
 
             composable(NavigationEnum.SplashScreenActivity.name){
                 SplashScreenActivity(navController)
@@ -175,7 +228,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             }
 
             composable(NavigationEnum.RegisterScreenActivity.name){
-                RegisterScreenActivity(registerViewModel)
+                RegisterScreenActivity(navController, registerViewModel)
             }
             composable(NavigationEnum.CreateProductActivity.name){
                 CreateProductScreen(navController, null, productViewModel)
@@ -200,6 +253,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                         )
                     }
             }
+
             composable(NavigationEnum.CatheringDetailActivity.name + "/{catheringId}", arguments = listOf(
                 navArgument("catheringId"){type = NavType.StringType}
             )){
@@ -222,10 +276,6 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     ?.let { it1 -> CatheringDetailScreen(navController, it1, catheringDetailViewModel) }
             }
 
-            composable(NavigationEnum.CreateCatheringActivity.name){
-                CreateCatheringScreen()
-            }
-
             composable(NavigationEnum.HistoryScreenActivity.name){
                 HistoryScreenActivity(navController, transactionViewModel)
             }
@@ -239,10 +289,37 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
             composable(NavigationEnum.SettingScreenActivity.name){
                 SettingScreenActivity(navController, settingViewModel)
             }
+            composable(NavigationEnum.CatheringProfileScreenActivity.name){
+               CatheringProfileScreen( catheringProfileViewModel)
+                 }
+            composable(NavigationEnum.CatheringApprovalScreenActivity.name){
+                CatheringApprovalScreen(catheringApprovalViewModel)
+            }
+            composable(NavigationEnum.OrderListScreenActivity.name){
+                OrderListScreen(navController = navController,"2",orderListViewModel)
+            }
+            composable(NavigationEnum.OrderDetailScreenActivity.name+ "/{groupId}", arguments =  listOf(
+                navArgument("groupId"){type = NavType.StringType}
+            )
+            ){
+                it.arguments?.getString("groupId")
+                    ?.let { it1 -> OrderDetailScreen(navController = navController, it1, orderDetailViewModel) }
 
+            }
+            composable(NavigationEnum.CreateCatheringScreenActivity.name){
+                CreateCatheringScreenActivity(navController ,createCatheringScreenActivityViewModel)
+            }
+
+            composable(NavigationEnum.CatheringHomeScreenActivity.name){
+                CatheringHomeScreen(navController = navController, catheringHomeViewModel)
+            }
+            composable(NavigationEnum.AdminHomeScreenActivity.name){
+                AdminHomeScreen(navController = navController, adminHomeViewModel)
+            }
             composable(NavigationEnum.ResetPasswordActivity.name){
                 ResetPasswordActivity(navController, resetPasswordViewModel)
             }
+
         }
 
     }

@@ -20,7 +20,7 @@ class RegisterViewModel @Inject constructor(private val repository: AuthReposito
     private val _registerStatus = MutableSharedFlow<DataAPIWrapper<Auth, Boolean, Exception>>()
     val registerStatus = _registerStatus.asSharedFlow()
 
-    fun register(user : User) {
+    fun register(user: User) {
         viewModelScope.launch(Dispatchers.IO) {
             try{
                 _registerStatus.emit(repository.register(user))

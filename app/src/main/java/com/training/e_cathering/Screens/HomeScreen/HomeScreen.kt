@@ -25,7 +25,6 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.google.android.gms.location.*
 import com.midtrans.sdk.corekit.core.MidtransSDK
 import com.midtrans.sdk.corekit.core.TransactionRequest
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme

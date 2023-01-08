@@ -15,6 +15,16 @@ interface TransactionAPI {
     @GET("getAllTransactionGroup/{user_id}")
     suspend fun getAllTransactionGroup(@Path("user_id") user_id : Int, @Header("token") token : String) : Response<TransactionGroup>
 
+
+    @GET("/getAllPaidGroup/{user_id}")
+    suspend fun  getAllPaidGroup(@Path("user_id") user_id : Int, @Header("token") token : String) : Response<TransactionGroup>
+
+    @GET("/getDetailPaidGroups/{transaction_group_id}")
+    suspend fun  getDetailPaidGroups(@Path("transaction_group_id") id : Int, @Header("token") token : String) : Response<TransactionProduct>
+
+    @POST("/updatePaidGroups/{id}")
+    suspend fun  updatePaidGroups(@Body transactionGroup: TransactionGroup,@Path("id") id : Int, @Header("token") token : String) : SingleResponseData<TransactionGroup>
+
     @GET("setTransaction/success/{id_transaction}")
     suspend fun setToSuccess(@Path("id_transaction") id_transaction : Int, @Header("token") token : String) : SingleResponseData<TransactionGroup>
 
@@ -23,4 +33,5 @@ interface TransactionAPI {
 
     @GET("resetIdTransaction/{id_transaction}")
     suspend fun resetIdTransaction(@Path("id_transaction") id_transaction : String, @Header("token") token : String) : SingleResponseData<String>
+
 }

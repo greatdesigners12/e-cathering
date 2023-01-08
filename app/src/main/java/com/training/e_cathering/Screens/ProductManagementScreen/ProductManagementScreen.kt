@@ -80,16 +80,7 @@ fun ProductManagementScreen(navController : NavController, viewModel: ProductMan
 
 
     LazyColumn(modifier = Modifier.padding(10.dp)) {
-        item{
-            Column() {
-                basicInputField("Search Product", inputValue = search.value){
-                    search.value = it
-                }
 
-            }
-
-
-        }
         items(items = productList) { product ->
             Spacer(modifier = Modifier.height(20.dp))
             productCardHorizontal(

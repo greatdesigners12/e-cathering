@@ -1,19 +1,13 @@
 package com.training.e_cathering.Screens.CatheringDetailScreen
 
-import android.content.ContentValues.TAG
-import android.util.Log
-import android.widget.Space
-import android.widget.Toast
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -28,15 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.e_cathering.Components.basicInputField
 import com.training.e_cathering.DataStoreInstance
 import com.training.e_cathering.Models.*
 import com.training.e_cathering.Navigation.NavigationEnum
-import com.training.e_cathering.Screens.ProductDetailScreen.ProductDetailViewModel
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun productCardHorizontal(product: Product, buttonText : String, onCardClick : (Product) -> Unit = {}, colorButton : Color = MaterialTheme.colors.primary,onClick : (Product) -> Unit) {
@@ -100,9 +93,6 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
 
     val dataStore = DataStoreInstance(LocalContext.current)
 
-    val addCartStatus = remember{
-        mutableStateOf<SingleResponseData<CartWithRelationship>?>(null)
-    }
 
     val cartData = remember{
         mutableStateListOf<Int>()
@@ -171,11 +161,11 @@ fun CatheringDetailScreen(navController: NavController, id : String, viewModel: 
 
     LaunchedEffect(viewModel.removeCartStatus.collectAsState(initial = "").value){
         viewModel.removeCartStatus.collect{
-            if(it != null){
+
                 if(it.status == "success"){
                     viewModel.getAllProductsWithCartChecker(dataStore.getUserId, search.value, orderPrice.value, foodAvailability.value, id,  dataStore.getToken)
                 }
-            }
+
         }
     }
 

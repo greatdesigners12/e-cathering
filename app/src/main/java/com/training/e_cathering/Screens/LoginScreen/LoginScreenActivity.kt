@@ -2,9 +2,11 @@ package com.training.e_cathering.Screens.LoginScreen
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -56,7 +58,6 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
     LaunchedEffect(key1 = true){
 
         dataStore.getToken.collect{
-            Log.d(TAG, "LoginScreenActivity: ${it}")
             if(it != "" && it != null){
                 dataStore.getRole.collect{
                     if(it != null){
@@ -64,15 +65,12 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
                             navController.navigate(NavigationEnum.ProductManagementActivity.name)
                         }else{
                             navController.navigate(NavigationEnum.HomeScreenActivity.name)
-
                         }
                     }
                 }
 
             }
         }
-
-
 
     }
 
@@ -84,7 +82,9 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
                     if(it.data!!.role == "cathering"){
                         viewModel.setCredential(it.data!!, dataStore, navController)
                     }else if(it.data!!.role == "admin"){
-                        
+                        alertDialogMsg.value = "Login berhasil"
+                        showAlertDialog.value = true
+                        viewModel.setCredential(it.data!!, dataStore, navController)
                     }else{
                         alertDialogMsg.value = "Login berhasil"
                         showAlertDialog.value = true
@@ -151,6 +151,29 @@ fun LoginScreenActivity(navController: NavController, viewModel : LoginViewModel
                 }
             }
         }
+        Spacer(Modifier.height(30.dp))
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+            Column(){
+                Row(){
+                    Text("Belum punya akun ? ")
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text("Register sekarang", color = MaterialTheme.colors.primary, modifier = Modifier.clickable {
+                        navController.navigate(NavigationEnum.RegisterScreenActivity.name)
+                    })
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(){
+                    Text("Ingin daftar sebagai cathering ? ")
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text("klik sekarang", color = MaterialTheme.colors.primary, modifier = Modifier.clickable {
+                        navController.navigate(NavigationEnum.CreateCatheringScreenActivity.name)
+                    })
+                }
+            }
+
+        }
+
+
 
     }
 }
