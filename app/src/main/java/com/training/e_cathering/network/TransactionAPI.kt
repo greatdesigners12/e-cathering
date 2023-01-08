@@ -15,8 +15,8 @@ interface TransactionAPI {
     @GET("getAllTransactionGroup/{user_id}")
     suspend fun getAllTransactionGroup(@Path("user_id") user_id : Int, @Header("token") token : String) : Response<TransactionGroup>
 
-    @GET("/getAllPaidGroup/{cathering_id}")
-    suspend fun  getAllPaidGroup(@Path("cathering_id") cathering_id : Int, @Header("token") token : String) : Response<TransactionGroup>
+    @GET("/getAllPaidGroup/{user_id}")
+    suspend fun  getAllPaidGroup(@Path("user_id") user_id : Int, @Header("token") token : String) : Response<TransactionGroup>
 
     @GET("/getDetailPaidGroups/{transaction_group_id}")
     suspend fun  getDetailPaidGroups(@Path("transaction_group_id") id : Int, @Header("token") token : String) : Response<TransactionProduct>

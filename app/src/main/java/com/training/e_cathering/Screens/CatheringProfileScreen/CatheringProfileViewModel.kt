@@ -52,6 +52,7 @@ class CatheringProfileViewModel @Inject constructor(val catheringRepository: Cat
                                     it1.data
                                 )
                             }
+
                         }
                         }
                     }

@@ -44,7 +44,7 @@ class CatheringApprovalViewModel @Inject constructor(val catheringRepository: Ca
                             it1.data
                         )
                     }
-
+                    getAllCatherings()
 
 
                 }

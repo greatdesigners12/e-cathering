@@ -10,7 +10,6 @@ enum class NavigationEnum {
     TransactionDetailActivity,
     CatheringListActivity,
     CreateProductActivity,
-    CreateCatheringActivity,
     RegisterScreenActivity,
     HistoryScreenActivity,
     SettingScreenActivity,
@@ -18,6 +17,9 @@ enum class NavigationEnum {
     CatheringApprovalScreenActivity,
     OrderListScreenActivity,
     OrderDetailScreenActivity,
+    CreateCatheringScreenActivity,
+    CatheringHomeScreenActivity,
+    AdminHomeScreenActivity,
 
 
 }

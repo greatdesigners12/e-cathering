@@ -53,12 +53,12 @@ class TransactionRepository @Inject constructor(val transactionAPI : Transaction
         }
         return data
     }
-    suspend fun getAllPaidGroups(cathering_id : String, token : String) : DataAPIWrapper<Response<TransactionGroup>, Boolean, Exception> {
+    suspend fun getAllPaidGroups(user_id : Int, token : String) : DataAPIWrapper<Response<TransactionGroup>, Boolean, Exception> {
         val data = DataAPIWrapper<Response<TransactionGroup>, Boolean, Exception>()
         data.loading = true
         try{
 
-            data.data = transactionAPI.getAllPaidGroup(cathering_id.toInt(), token)
+            data.data = transactionAPI.getAllPaidGroup(user_id.toInt(), token)
             Log.d(ContentValues.TAG, "getAllCatherings: ${data.data}")
             data.loading = false
         }catch(e : Exception){

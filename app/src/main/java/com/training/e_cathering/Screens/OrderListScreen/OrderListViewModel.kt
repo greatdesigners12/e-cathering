@@ -15,8 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.log
 
 
 @HiltViewModel
@@ -24,19 +26,21 @@ class OrderListViewModel @Inject constructor(val transactionRepository: Transact
     private val _transactionList = MutableSharedFlow<Response<TransactionGroup>>()
     val transactionList = _transactionList.asSharedFlow()
 
-    fun getAllPaidGroups(cathering_id: String , token : Flow<String?>){
+    fun getAllPaidGroups(user_id: Flow<String?> , token : Flow<String?>){
         viewModelScope.launch(Dispatchers.IO){
             token.collect{
                 if(it != null){
-                    transactionRepository.getAllPaidGroups(cathering_id, it).data?.let { it1 ->
+                    user_id.collect{
+                            user_id->
+                        if (user_id != null) {
+                    transactionRepository.getAllPaidGroups(user_id.toInt(), it).data?.let { it1 ->
                         _transactionList.emit(
                             it1
                         )
-                    }
+                    }}}}
                 }
             }
 
         }
     }
 
-}

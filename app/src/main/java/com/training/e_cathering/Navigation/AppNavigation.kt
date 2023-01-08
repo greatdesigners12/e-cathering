@@ -28,11 +28,13 @@ import com.training.e_cathering.Screens.CatheringApprovalScreen.CatheringApprova
 import com.training.e_cathering.Screens.CatheringApprovalScreen.CatheringApprovalViewModel
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailScreen
 import com.training.e_cathering.Screens.CatheringDetailScreen.CatheringDetailViewModel
+import com.training.e_cathering.Screens.CatheringHomeScreen.CatheringHomeScreen
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListScreen
 import com.training.e_cathering.Screens.CatheringListScreen.CatheringListViewModel
 import com.training.e_cathering.Screens.CatheringProfileScreen.CatheringProfileScreen
 import com.training.e_cathering.Screens.CatheringProfileScreen.CatheringProfileViewModel
-import com.training.e_cathering.Screens.CreateCatheringScreen.CreateCatheringScreen
+import com.training.e_cathering.Screens.CreateCatheringScreenActivity.CreateCatheringScreenActivity
+import com.training.e_cathering.Screens.CreateCatheringScreenActivity.CreateCatheringScreenActivityViewModel
 import com.training.e_cathering.Screens.CreateProductScreen.CreateProductScreen
 import com.training.e_cathering.Screens.CreateProductScreen.productViewModel
 import com.training.e_cathering.Screens.HistoryScreenActivity.HistoryScreenActivity
@@ -70,7 +72,8 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     transactionDetailViewModel: TransactionDetailViewModel = viewModel(),
                     settingViewModel: SettingViewModel = viewModel(),
                   orderDetailViewModel: OrderDetailViewModel = viewModel(),
-                  orderListViewModel: OrderListViewModel = viewModel()) {
+                  orderListViewModel: OrderListViewModel = viewModel(),
+                  createCatheringScreenActivityViewModel: CreateCatheringScreenActivityViewModel = viewModel()) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val appBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberNavController()
@@ -122,12 +125,21 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         }
         NavigationEnum.CatheringProfileScreenActivity.name->{
             bottomBarState.value = false
-            appBarState.value = false
+            appBarState.value = true
         }
         NavigationEnum.CatheringApprovalScreenActivity.name->{
             bottomBarState.value = false
+            appBarState.value = true
+        }
+        NavigationEnum.CreateCatheringScreenActivity.name->{
+            bottomBarState.value = false
             appBarState.value = false
         }
+        NavigationEnum.CatheringHomeScreenActivity.name->{
+            bottomBarState.value = false
+            appBarState.value = false
+        }
+
     }
 
     Scaffold(
@@ -148,7 +160,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         bottomBar = { UserPageBottomNavigation(navController = navController, bottomBarState) }
     ) {
 
-        NavHost(navController=navController, startDestination = NavigationEnum.CatheringApprovalScreenActivity.name){
+        NavHost(navController=navController, startDestination = NavigationEnum.CatheringHomeScreenActivity.name){
 
             composable(NavigationEnum.SplashScreenActivity.name){
                 SplashScreenActivity(navController)
@@ -202,11 +214,6 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     ?.let { it1 -> CatheringDetailScreen(navController, it1, catheringDetailViewModel) }
             }
 
-
-            composable(NavigationEnum.CreateCatheringActivity.name){
-                CreateCatheringScreen()
-            }
-
             composable(NavigationEnum.HistoryScreenActivity.name){
                 HistoryScreenActivity(navController, transactionViewModel)
             }
@@ -237,9 +244,13 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
                     ?.let { it1 -> OrderDetailScreen(navController = navController, it1, orderDetailViewModel) }
 
             }
-//            composable(NavigationEnum.OrderDetailScreenActivity.name){
-//                OrderDetailScreen(navController = navController,"14",orderDetailViewModel)
-//            }
+            composable(NavigationEnum.CreateCatheringScreenActivity.name){
+                CreateCatheringScreenActivity(createCatheringScreenActivityViewModel)
+            }
+            composable(NavigationEnum.CatheringHomeScreenActivity.name){
+                CatheringHomeScreen(navController = navController)
+            }
+
         }
 
     }

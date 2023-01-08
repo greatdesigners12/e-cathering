@@ -27,6 +27,6 @@ interface CatheringAPI {
     @POST("/updateCathering/{user_id}")
     suspend fun  updateCatheringProfile(@Body cathering: Cathering, @Path("user_id") id:String, @Header("token") token: String): SingleResponseData<Cathering>
 
-    @POST("/updateApprove/{cathering_id}")
-    suspend fun  updateVerifiedCathering(@Body cathering: Cathering, @Path("cathering_id") @Header("token") token: String): SingleResponseData<Cathering>
+    @POST("/createCathering")
+    suspend fun createCathering(@Body createCathering: CreateCathering) : SingleResponseData<CreateCathering>
 }

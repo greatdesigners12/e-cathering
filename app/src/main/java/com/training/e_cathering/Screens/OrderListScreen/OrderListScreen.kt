@@ -28,7 +28,7 @@ import com.training.e_cathering.R
 import java.text.DecimalFormat
 
 @Composable
-fun OrderListScreen(navController: NavController, cathering_id : String, viewModel: OrderListViewModel) {
+fun OrderListScreen(navController: NavController, user_id : String, viewModel: OrderListViewModel) {
     //tampilkan semua orderan yang ada yang mana sudah bayar->sedang diantar
     //opsi untuk melihat detail orderan ->tampilan list produk biasa
 
@@ -41,7 +41,7 @@ fun OrderListScreen(navController: NavController, cathering_id : String, viewMod
     val dataStore = DataStoreInstance(LocalContext.current)
 
     LaunchedEffect(key1 = true){
-        viewModel.getAllPaidGroups(cathering_id, dataStore.getToken)
+        viewModel.getAllPaidGroups(dataStore.getUserId, dataStore.getToken)
     }
 
     LaunchedEffect(key1 = viewModel.transactionList.collectAsState(initial = null).value){
@@ -51,9 +51,12 @@ fun OrderListScreen(navController: NavController, cathering_id : String, viewMod
     }
 
     Column(modifier = Modifier.fillMaxSize()){
-        Box( modifier = Modifier.fillMaxWidth().padding(top=16.dp,bottom=4.dp, start = 16.dp, end = 16.dp)){
+        Box( modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)){
             Text(text = "List Pesanan",fontWeight = FontWeight.Bold, style= MaterialTheme.typography.h4,modifier = Modifier.padding(start = 8.dp))
         }
+
     LazyColumn(modifier = Modifier.padding(10.dp)){
 
         items(items=transactionList){transactionList ->
@@ -68,7 +71,8 @@ fun OrderListScreen(navController: NavController, cathering_id : String, viewMod
 @Composable
 fun CatheringCardHorizontal(cathering: TransactionGroup, onClick: (TransactionGroup) -> Unit){
     Card(modifier = Modifier
-        .fillMaxWidth().clickable {
+        .fillMaxWidth()
+        .clickable {
             onClick(cathering)
         }) {
         Row() {

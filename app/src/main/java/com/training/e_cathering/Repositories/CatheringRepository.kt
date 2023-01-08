@@ -1,5 +1,6 @@
 package com.training.e_cathering.Repositories
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.training.e_cathering.Models.*
@@ -69,6 +70,22 @@ class CatheringRepository @Inject constructor(private val catheringAPI: Catherin
 
         return data
     }
+    suspend fun createCathering(createCathering: CreateCathering) : DataAPIWrapper<SingleResponseData<CreateCathering>, Boolean, Exception> {
+        val data = DataAPIWrapper<SingleResponseData<CreateCathering>, Boolean, Exception>()
+        data.loading = true
+        try{
+
+            data.data = catheringAPI.createCathering(createCathering)
+            Log.d(ContentValues.TAG, "createCathering: ${data.data}")
+            data.loading = false
+        }catch(e : Exception){
+            data.e = e
+            Log.d(ContentValues.TAG, "createCathering: ${e.message}")
+        }
+        return data
+
+    }
+
 
     suspend fun getAllCatheringsByGenre(genre : String, token: String) : DataAPIWrapper<Response<CatheringWithRating>, Boolean, Exception>{
         val data = DataAPIWrapper<Response<CatheringWithRating>, Boolean, Exception>()
