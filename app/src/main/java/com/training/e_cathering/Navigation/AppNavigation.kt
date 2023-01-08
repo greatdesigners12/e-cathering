@@ -190,7 +190,7 @@ fun AppNavigation(homeViewModel: HomeViewModel = viewModel(),
         bottomBar = { UserPageBottomNavigation(navController = navController, bottomBarState) }
     ){
 
-        NavHost(navController=navController, startDestination = NavigationEnum.HomeScreenActivity.name){
+        NavHost(navController=navController, startDestination = NavigationEnum.CatheringHomeScreenActivity.name){
 
             composable(NavigationEnum.SplashScreenActivity.name){
                 SplashScreenActivity(navController)
